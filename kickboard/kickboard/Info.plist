@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>GoogleMapsAPIKey</key>
+	<string>AIzaSyA0QLhsa_4VYNSoX0tackGmZy5pdtwWjsk</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Need location for rentals</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Need location for rentals</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
