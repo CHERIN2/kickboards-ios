@@ -2,31 +2,45 @@ import UIKit
 import GoogleMaps
 import SnapKit
 
-
-//MARK: - Initilization
-class MapViewController: UIViewController {
-
+class MapViewController: UIViewController, GMSMapViewDelegate {
+    
+    // MARK: - Initialization
     private var floatingButton: UIButton!
     private var mapView: GMSMapView!
-    private var camera: GMSCameraPosition!
-    private var locationManager: CLLocationManager!
-
+    private var locationManager = CLLocationManager()
+    private var currentLocation: CLLocationCoordinate2D?
+    
+    private let defaultLatitude: CLLocationDegrees = 37.5759
+    private let defaultLongitude: CLLocationDegrees = 126.9768
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCameraPosition()
+        initializeMapView()
+        setupFloatingButton()
+        setUpConstraints()
+    }
+    
+    // MARK: - MapView Setup
+    private func initializeMapView() {
+        setupCameraPosition(latitude: defaultLatitude, longitude: defaultLongitude)
         self.view = mapView
         mapView.delegate = self
-        setupFloatingButton()
+        locationManager.delegate = self
     }
-}
-
-
-//MARK: - FloatingButton
-extension MapViewController {
     
+    // MARK: - Constraints Setup
+    private func setUpConstraints() {
+        floatingButton.snp.makeConstraints { make in
+            make.width.height.equalTo(50)
+            make.bottom.equalTo(view).offset(-100)
+            make.trailing.equalTo(view).offset(-20)
+        }
+        
+        //서치바 위치넣을 예정
+    }
+    
+    //MARK: - FlotingButton Setup
     private func setupFloatingButton() {
-
         floatingButton = UIButton(type: .custom)
         floatingButton.setImage( UIImage(systemName: "scope"), for: .normal)
         floatingButton.tintColor = .black
@@ -38,48 +52,50 @@ extension MapViewController {
         floatingButton.layer.borderWidth = 1.0
         floatingButton.addTarget(self, action: #selector(floatingButtonTapped), for: .touchUpInside)
         view.addSubview(floatingButton)
-        floatingButton.snp.makeConstraints { make in
-            make.width.height.equalTo(50)
-            make.bottom.equalTo(view).offset(-100)
-            make.trailing.equalTo(view).offset(-20)
+    }
+    
+    // MARK: - FloatingButton Action
+    @objc private func floatingButtonTapped() {
+        print("floatingButton Tapped")
+        findCurrentLocation()
+    }
+    
+    private func findCurrentLocation() {
+        switch locationManager.authorizationStatus {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse, .authorizedAlways:
+            locationManager.requestLocation()
+        default:
+            print("Location access not granted")
         }
     }
-
-    @objc private func floatingButtonTapped() {
-        print("플로팅 버튼 눌림")
+    
+    
+    // MARK: - Camera Position
+    private func setupCameraPosition(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 15)
+        if mapView == nil {
+            mapView = GMSMapView(frame: self.view.bounds, camera: camera)
+            self.view.addSubview(mapView)
+        } else {
+            mapView.camera = camera
+        }
     }
 }
 
-//MARK: - Camera Position
-extension MapViewController: GMSMapViewDelegate, CLLocationManagerDelegate {
+// MARK: - Find Current Location (CLLocationManagerDelegate)
+extension MapViewController: CLLocationManagerDelegate {
     
-    //위도 경도 변수 추후 할당
-    private func setupCameraPosition() {
-        
-        
-        camera = GMSCameraPosition()
-        camera = GMSCameraPosition.camera(withLatitude: 37.58, longitude:126.98, zoom: 15)
-        mapView = GMSMapView(frame: .zero, camera: camera)
-
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        setupCameraPosition(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
     }
     
-    // Current Location 권한 획득
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-         if status == .authorizedWhenInUse {
-             locationManager.startUpdatingLocation()
-             mapView.isMyLocationEnabled = true
-             mapView.settings.myLocationButton = true
-         }
-     }
-    
-    
-    
-    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error getting location: \(error)")
+    }
 }
-
-
-
-
 
 
 
