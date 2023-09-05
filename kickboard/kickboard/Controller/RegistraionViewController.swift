@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class RegistraionViewController: UIViewController {
     
@@ -18,6 +19,46 @@ class RegistraionViewController: UIViewController {
         
         kickboardTableView.dataSource = self
         kickboardTableView.delegate = self
+            
+        setupUI()
+    }
+    
+    func setupUI() {
+        setupCurrentLocationLabel()
+        setupRidingTimeLabel()
+        setupKickboardTableView()
+    }
+    
+    func setupCurrentLocationLabel() {
+        currentLocationLabel.text = "현위치 : 서울특별시 종로구 청와대로 1길 청와대 경복궁 위에 있고 지붕이 파란색인 그 집의 주소를 말하고 싶습니다"
+        currentLocationLabel.numberOfLines = 0
+        currentLocationLabel.lineBreakStrategy = .hangulWordPriority
+        
+        currentLocationLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(50)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+        }
+        
+    }
+    
+    func setupRidingTimeLabel() {
+        ridingTimeLabel.isHidden = true
+        
+        ridingTimeLabel.snp.makeConstraints { make in
+            make.top.equalTo(currentLocationLabel.snp.bottom).offset(20)
+            make.leading.equalTo(currentLocationLabel.snp.leading)
+            make.trailing.equalTo(currentLocationLabel.snp.trailing)
+        }
+    }
+    
+    func setupKickboardTableView() {
+        kickboardTableView.snp.makeConstraints { make in
+            make.top.equalTo(ridingTimeLabel.snp.bottom).offset(20)
+            make.leading.equalTo(currentLocationLabel.snp.leading)
+            make.trailing.equalTo(currentLocationLabel.snp.trailing)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
     }
 }
 
