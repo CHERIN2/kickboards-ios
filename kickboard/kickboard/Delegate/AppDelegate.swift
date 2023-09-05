@@ -17,6 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         print("Appdelegate")
         GMSServices.provideAPIKey("AIzaSyA0QLhsa_4VYNSoX0tackGmZy5pdtwWjsk")
+        
+        let isFirstLaunchKey: String = "isFirstLaunch"
+        let isFirstLaunch = UserDefaults.standard.bool(forKey: isFirstLaunchKey)
+        
+        if !isFirstLaunch {
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(dummyData), forKey: dummyKey)
+            UserDefaults.standard.set(true, forKey: isFirstLaunchKey)
+        }
 
         return true
     }
