@@ -160,25 +160,10 @@
                     <view key="view" contentMode="scaleToFill" id="1EV-ld-U5t">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s9A-Ch-bsi" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="jYX-x9-Llp"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="jYX-x9-Llp" firstAttribute="bottom" secondItem="s9A-Ch-bsi" secondAttribute="bottom" id="19e-BN-e8e"/>
-                            <constraint firstItem="s9A-Ch-bsi" firstAttribute="leading" secondItem="jYX-x9-Llp" secondAttribute="leading" id="3pJ-St-oKd"/>
-                            <constraint firstItem="s9A-Ch-bsi" firstAttribute="top" secondItem="jYX-x9-Llp" secondAttribute="top" id="JVI-e1-78u"/>
-                            <constraint firstItem="jYX-x9-Llp" firstAttribute="trailing" secondItem="s9A-Ch-bsi" secondAttribute="trailing" id="zMm-Ye-J78"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item 2" id="FCY-S8-9HM"/>
-                    <connections>
-                        <outlet property="mapView" destination="s9A-Ch-bsi" id="dor-GD-NM6"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="csK-pO-lRs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -187,7 +172,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="433-3h-rK9">
             <objects>
-                <tabBarController id="ezt-ZF-rmh" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ezt-ZF-rmh" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="cv0-fB-W10"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Zla-qi-hKP">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
