@@ -91,12 +91,26 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
 
 extension RegistraionViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        //        guard let location = locations.last else { return }
+        /*
+         guard let location = locations.last else { return }
+         
+         이 코드를 사용해서 현재 위치를 받아오겠지만, kickboard 더미 데이터가 광화문 근처에 있으므로 확인을 위해
+         광화문의 위도와 경도(fakeLocation)를 사용해서 확인하기로 함
+         */
+
         
         let fakeLocation = CLLocation(latitude: 37.5741, longitude: 126.9768)
+        updateCurrentLocationLabel(at: fakeLocation)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("에러: \(error.localizedDescription)")
+    }
+    
+    func updateCurrentLocationLabel(at locate: CLLocation) {
         
         let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(fakeLocation) { [self] (placemarks, error) in
+        geocoder.reverseGeocodeLocation(locate) { [self] (placemarks, error) in
             if let placemark = placemarks?.first {
                 
                 guard let locality = placemark.locality,
@@ -104,17 +118,13 @@ extension RegistraionViewController: CLLocationManagerDelegate {
                       let subThoroughfare = placemark.subThoroughfare else { return }
                 
                 self.address = "\(locality) \(thoroughfare) \(subThoroughfare)"
-                currentLocationLabel.text = "현 위치: \(self.address)"
+                currentLocationLabel.text = "현 위치 : \(self.address)"
             }
- 
+            
             if let error = error {
                 print("에러: \(error.localizedDescription)")
                 return
             }
         }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("에러: \(error.localizedDescription)")
     }
 }
