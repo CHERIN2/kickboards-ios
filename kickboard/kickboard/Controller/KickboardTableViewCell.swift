@@ -7,22 +7,15 @@
 
 import UIKit
 import SnapKit
+import CoreLocation
 
 class KickboardTableViewCell: UITableViewCell {
     
     @IBOutlet weak var numberLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     
-    func setupUI(){
-        numberLabel.text = "아이고 넘버"
-        addressLabel.text = "아이고 주소"
-        
-        setupNumberLabel()
-        setupAddressLabel()
-    }
-    
-    func setupNumberLabel() {
-        numberLabel.text = "1 : "
+    func setupNumberLabel(wiht number: Int) {
+        numberLabel.text = "\(number) : "
         
         numberLabel.snp.makeConstraints({ make in
             make.top.equalToSuperview()
@@ -30,8 +23,18 @@ class KickboardTableViewCell: UITableViewCell {
         })
     }
     
-    func setupAddressLabel() {
-        addressLabel.text = "서울특별시 종로구 청와대로 1길 청와대 경복궁 위에 있고 지붕이 파란색인 그 집의 주소를 말하고 싶습니다"
+    func setupAddressLabel(latitude: Double, longitude: Double) {
+        
+        let location = CLLocation(latitude: latitude, longitude: longitude)
+        
+        findAddress(at: location) { (address) in
+            if let address = address {
+                DispatchQueue.main.async {
+                    self.addressLabel.text = "\(address)"
+                }
+            }
+        }
+
         addressLabel.numberOfLines = 0
         addressLabel.lineBreakStrategy = .hangulWordPriority
         
@@ -40,5 +43,27 @@ class KickboardTableViewCell: UITableViewCell {
             make.leading.equalTo(numberLabel.snp.trailing).offset(20)
             make.trailing.equalToSuperview()
         })
+    }
+    
+    func findAddress(at location: CLLocation, completion: @escaping (String?) -> Void) {
+        let geocoder = CLGeocoder()
+        
+        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
+            
+            if let placemark = placemarks?.first {
+                
+                guard let locality = placemark.locality,
+                      let thoroughfare = placemark.thoroughfare,
+                      let subThoroughfare = placemark.subThoroughfare else { return }
+                
+                let address = "\(locality) \(thoroughfare) \(subThoroughfare)"
+                completion(address)
+                
+                if let error = error {
+                    print("에러: \(error.localizedDescription)")
+                    return
+                }
+            }
+        }
     }
 }

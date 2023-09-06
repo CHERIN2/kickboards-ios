@@ -18,6 +18,7 @@ class RegistraionViewController: UIViewController {
     let locationManager = CLLocationManager()
     
     var address: String = "현 위치"
+    var kickboardsWithinRangeList: [Kickboard] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,16 +74,33 @@ class RegistraionViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestLocation()
     }
+    
+    func findKickboards(within range: Double, at location: CLLocation) {
+        let availableKickboardList = StorageManager.getAllKickboardList().filter { $0.kickboardStatus }
+        
+        for kickboard in availableKickboardList {
+            let kickboardLocation = CLLocation(latitude: kickboard.locationY, longitude: kickboard.locationX)
+            let distance = location.distance(from: kickboardLocation)
+            
+            if distance <= range {
+                kickboardsWithinRangeList.append(kickboard)
+            }
+        }
+    }
 }
 
 extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return kickboardsWithinRangeList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let kickboard = kickboardsWithinRangeList[indexPath.row]
+        
         let cell = kickboardTableView.dequeueReusableCell(withIdentifier: "KickboardTableViewCell", for: indexPath) as! KickboardTableViewCell
-        cell.setupUI()
+        cell.setupNumberLabel(wiht: kickboard.number)
+        cell.setupAddressLabel(latitude: kickboard.locationY, longitude: kickboard.locationX)
         return cell
     }
 }
@@ -104,6 +122,8 @@ extension RegistraionViewController: CLLocationManagerDelegate {
                 }
             }
         }
+        
+        findKickboards(within: 500, at: fakeLocation)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
