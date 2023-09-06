@@ -27,7 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
         
         
-        
         //MARK: - Request User's Location
         GMSServices.provideAPIKey("AIzaSyA0QLhsa_4VYNSoX0tackGmZy5pdtwWjsk")
         let locationManager = CLLocationManager()

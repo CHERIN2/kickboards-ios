@@ -16,6 +16,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeMapView()
+        placeKickboardMarkers()
         setupFloatingButton()
         setUpConstraints()
     }
@@ -27,6 +28,23 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         mapView.delegate = self
         locationManager.delegate = self
     }
+    
+    // MARK: - KickBoard Marker
+    private func placeKickboardMarkers() {
+        for kickboard in dummyData {
+            let marker = GMSMarker()
+            marker.position = CLLocationCoordinate2D(latitude: kickboard.locationY, longitude: kickboard.locationX)
+            marker.title = "\(kickboard.number)"
+            
+            if kickboard.kickboardStatus {
+                marker.icon = UIImage(systemName: "circle.fill")
+            } else {
+                marker.icon = UIImage(systemName: "circle")
+            }
+            marker.map = mapView
+        }
+    }
+
     
     // MARK: - Constraints Setup
     private func setUpConstraints() {
@@ -53,6 +71,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         floatingButton.addTarget(self, action: #selector(floatingButtonTapped), for: .touchUpInside)
         view.addSubview(floatingButton)
     }
+
     
     // MARK: - FloatingButton Action
     @objc private func floatingButtonTapped() {
@@ -94,9 +113,6 @@ extension MapViewController: CLLocationManagerDelegate {
         print("Error getting location: \(error)")
     }
 }
-
-
-
 
 
 
