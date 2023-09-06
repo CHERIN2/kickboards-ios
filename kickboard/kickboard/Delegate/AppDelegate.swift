@@ -21,12 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         let isFirstLaunch = UserDefaults.standard.bool(forKey: isFirstLaunchKey)
         
         if !isFirstLaunch {
-            UserDefaults.standard.set(try? PropertyListEncoder().encode(dummyData), forKey: dummyKey)
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(dummyData), forKey: StorageManager.kickboardKey)
             UserDefaults.standard.set(true, forKey: isFirstLaunchKey)
         }
 
-        
-        
         //MARK: - Request User's Location
         GMSServices.provideAPIKey("AIzaSyA0QLhsa_4VYNSoX0tackGmZy5pdtwWjsk")
         let locationManager = CLLocationManager()
