@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import CoreLocation
 
 class RegistraionViewController: UIViewController {
     
@@ -14,11 +15,17 @@ class RegistraionViewController: UIViewController {
     @IBOutlet weak var ridingTimeLabel: UILabel!
     @IBOutlet weak var kickboardTableView: UITableView!
     
+    let locationManager = CLLocationManager()
+    
+    var address: String = "현 위치"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         kickboardTableView.dataSource = self
         kickboardTableView.delegate = self
+        
+        locationManager.delegate = self
             
         setupUI()
     }
@@ -30,7 +37,7 @@ class RegistraionViewController: UIViewController {
     }
     
     func setupCurrentLocationLabel() {
-        currentLocationLabel.text = "현위치 : 서울특별시 종로구 청와대로 1길 청와대 경복궁 위에 있고 지붕이 파란색인 그 집의 주소를 말하고 싶습니다"
+        currentLocationLabel.text = address
         currentLocationLabel.numberOfLines = 0
         currentLocationLabel.lineBreakStrategy = .hangulWordPriority
         
@@ -40,6 +47,7 @@ class RegistraionViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-20)
         }
         
+        findCurrentLocation()
     }
     
     func setupRidingTimeLabel() {
@@ -60,6 +68,13 @@ class RegistraionViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
+    
+    //현재 위치 찾기 관련해서는 종혁님 코드랑 겹치니까 공통함수로 뺄 수 있을 것도 같다 -> 논의 필요
+    func findCurrentLocation() {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
+    }
 }
 
 extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate {
@@ -71,5 +86,35 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
         let cell = kickboardTableView.dequeueReusableCell(withIdentifier: "KickboardTableViewCell", for: indexPath) as! KickboardTableViewCell
         cell.setupUI()
         return cell
+    }
+}
+
+extension RegistraionViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        //        guard let location = locations.last else { return }
+        
+        let fakeLocation = CLLocation(latitude: 37.5741, longitude: 126.9768)
+        
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(fakeLocation) { [self] (placemarks, error) in
+            if let placemark = placemarks?.first {
+                
+                guard let locality = placemark.locality,
+                      let thoroughfare = placemark.thoroughfare,
+                      let subThoroughfare = placemark.subThoroughfare else { return }
+                
+                self.address = "\(locality) \(thoroughfare) \(subThoroughfare)"
+                currentLocationLabel.text = "현 위치: \(self.address)"
+            }
+ 
+            if let error = error {
+                print("에러: \(error.localizedDescription)")
+                return
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("에러: \(error.localizedDescription)")
     }
 }
