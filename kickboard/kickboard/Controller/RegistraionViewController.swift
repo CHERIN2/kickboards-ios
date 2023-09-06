@@ -69,10 +69,8 @@ class RegistraionViewController: UIViewController {
         }
     }
     
-    //현재 위치 찾기 관련해서는 종혁님 코드랑 겹치니까 공통함수로 뺄 수 있을 것도 같다 -> 논의 필요
     func findCurrentLocation() {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
     }
 }
@@ -97,33 +95,39 @@ extension RegistraionViewController: CLLocationManagerDelegate {
          이 코드를 사용해서 현재 위치를 받아오겠지만, kickboard 더미 데이터가 광화문 근처에 있으므로 확인을 위해
          광화문의 위도와 경도(fakeLocation)를 사용해서 확인하기로 함
          */
-
         
         let fakeLocation = CLLocation(latitude: 37.5741, longitude: 126.9768)
-        updateCurrentLocationLabel(at: fakeLocation)
+        findAddress(at: fakeLocation) { (address) in
+            if let address = address {
+                DispatchQueue.main.async {
+                    self.currentLocationLabel.text = "현재 위치: \(address)"
+                }
+            }
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("에러: \(error.localizedDescription)")
     }
     
-    func updateCurrentLocationLabel(at locate: CLLocation) {
-        
+    func findAddress(at location: CLLocation, completion: @escaping (String?) -> Void) {
         let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(locate) { [self] (placemarks, error) in
+        
+        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
+            
             if let placemark = placemarks?.first {
                 
                 guard let locality = placemark.locality,
                       let thoroughfare = placemark.thoroughfare,
                       let subThoroughfare = placemark.subThoroughfare else { return }
                 
-                self.address = "\(locality) \(thoroughfare) \(subThoroughfare)"
-                currentLocationLabel.text = "현 위치 : \(self.address)"
-            }
-            
-            if let error = error {
-                print("에러: \(error.localizedDescription)")
-                return
+                let address = "\(locality) \(thoroughfare) \(subThoroughfare)"
+                completion(address)
+                
+                if let error = error {
+                    print("에러: \(error.localizedDescription)")
+                    return
+                }
             }
         }
     }
