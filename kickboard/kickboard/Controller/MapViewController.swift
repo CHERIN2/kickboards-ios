@@ -57,27 +57,25 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     // MARK: - FloatingButton Action
     @objc private func floatingButtonTapped() {
         print("floatingButton Tapped")
+        func findCurrentLocation() {
+            switch locationManager.authorizationStatus {
+                case .notDetermined:
+                    locationManager.requestWhenInUseAuthorization()
+                case .authorizedWhenInUse, .authorizedAlways:
+                    locationManager.requestLocation()
+                default:
+                    print("Location access not granted")
+            }
+        }
         findCurrentLocation()
     }
     
-    private func findCurrentLocation() {
-        switch locationManager.authorizationStatus {
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-        case .authorizedWhenInUse, .authorizedAlways:
-            locationManager.requestLocation()
-        default:
-            print("Location access not granted")
-        }
-    }
-    
-    
     // MARK: - Camera Position
+
     private func setupCameraPosition(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 15)
         if mapView == nil {
             mapView = GMSMapView(frame: self.view.bounds, camera: camera)
-            self.view.addSubview(mapView)
         } else {
             mapView.camera = camera
         }
