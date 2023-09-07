@@ -15,10 +15,13 @@ class RegistraionViewController: UIViewController {
     @IBOutlet weak var ridingTimeLabel: UILabel!
     @IBOutlet weak var kickboardTableView: UITableView!
     
-    let locationManager = CLLocationManager()
+    let hoursTextField = UITextField()
+    let hours: [String] = ["1", "2", "3", "4", "5"]
     
     var address: String = "현 위치"
     var kickboardsWithinRangeList: [Kickboard] = []
+    
+    let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,8 +63,6 @@ class RegistraionViewController: UIViewController {
     }
     
     func setupHoursTextField() {
-        
-        let hoursTextField = UITextField()
         hoursTextField.placeholder = "시간을 선택해 주세요"
         hoursTextField.layer.borderColor = UIColor.gray.cgColor
         hoursTextField.layer.borderWidth = 1
@@ -103,6 +104,22 @@ class RegistraionViewController: UIViewController {
     }
     
     @objc func showPickerView() {
+        let pickerView = UIPickerView()
+        pickerView.dataSource = self
+        pickerView.delegate = self
+        hoursTextField.inputView = pickerView
+        
+        let cancelButton = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(cancelButtonTapped))
+
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        toolBar.isUserInteractionEnabled = true
+        toolBar.setItems([cancelButton], animated: false)
+        hoursTextField.inputAccessoryView = toolBar
+    }
+    
+    @objc func cancelButtonTapped() {
+        hoursTextField.resignFirstResponder()
     }
 }
 
@@ -128,6 +145,20 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
         cell.setupNumberLabel(wiht: kickboard.number)
         cell.setupAddressLabel(latitude: kickboard.locationY, longitude: kickboard.locationX)
         return cell
+    }
+}
+
+extension RegistraionViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return hours.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return hours[row]
     }
 }
 
