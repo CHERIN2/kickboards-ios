@@ -17,6 +17,7 @@ class RegistraionViewController: UIViewController {
     
     let hoursTextField = UITextField()
     let hours: [String] = ["1", "2", "3", "4", "5"]
+    var selectedHours: String = "1 시간"
     
     var address: String = "현 위치"
     var kickboardsWithinRangeList: [Kickboard] = []
@@ -110,15 +111,23 @@ class RegistraionViewController: UIViewController {
         hoursTextField.inputView = pickerView
         
         let cancelButton = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(cancelButtonTapped))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "확인", style: .done, target: self, action: #selector(doneButtonTapped))
 
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
-        toolBar.isUserInteractionEnabled = true
-        toolBar.setItems([cancelButton], animated: false)
+        toolBar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
         hoursTextField.inputAccessoryView = toolBar
+        
+        hoursTextField.text = selectedHours
     }
     
     @objc func cancelButtonTapped() {
+        hoursTextField.text = nil
+        hoursTextField.resignFirstResponder()
+    }
+    
+    @objc func doneButtonTapped() {
         hoursTextField.resignFirstResponder()
     }
 }
@@ -138,7 +147,6 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         let kickboard = kickboardsWithinRangeList[indexPath.row]
         
         let cell = kickboardTableView.dequeueReusableCell(withIdentifier: "KickboardTableViewCell", for: indexPath) as! KickboardTableViewCell
@@ -158,7 +166,13 @@ extension RegistraionViewController: UIPickerViewDataSource, UIPickerViewDelegat
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return hours[row]
+        return "\(hours[row]) 시간"
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectedHours = "\(hours[row]) 시간"
+        hoursTextField.text = selectedHours
+        hoursTextField.resignFirstResponder()
     }
 }
 
