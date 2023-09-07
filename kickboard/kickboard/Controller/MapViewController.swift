@@ -18,7 +18,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("viewDidLoad")
-
         initializeMapView()
         placeKickboardMarkers()
         setupFloatingButton()
@@ -86,7 +85,16 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         searchBar.delegate = self
         searchBar.isUserInteractionEnabled = true
         view.addSubview(searchBar)
+        
+        searchBar.searchTextField.addTarget(self, action: #selector(searchBarTapped), for: .touchUpInside)
     }
+    
+    @objc func searchBarTapped() {
+        print("Test")
+        searchBar.becomeFirstResponder()
+    }
+    
+
     
     //MARK: - FlotingButton Setup
     private func setupFloatingButton() {
@@ -150,17 +158,11 @@ extension MapViewController: CLLocationManagerDelegate {
 
 extension MapViewController: UISearchBarDelegate {
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("제발1")
-    }
-    
-    
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         print("제발2")
         let autocompleteController = GMSAutocompleteViewController()
         autocompleteController.delegate = self
         self.present(autocompleteController, animated: true, completion: nil)
-
     }
 }
 

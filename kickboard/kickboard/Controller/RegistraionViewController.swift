@@ -127,6 +127,7 @@ extension RegistraionViewController: CLLocationManagerDelegate {
         findAddress(at: fakeLocation) { (address) in
             if let address = address {
                 DispatchQueue.main.async {
+                    print("현재위치")
                     self.currentLocationLabel.text = "현재 위치: \(address)"
                 }
             }
