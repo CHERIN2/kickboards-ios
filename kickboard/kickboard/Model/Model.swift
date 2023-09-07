@@ -5,26 +5,22 @@
 //  Created by Jooyeon Kang on 2023/09/05.
 //
 
-
-
-
 import UIKit
 
 class StorageManager {
-
-private let userDefaults = UserDefaults.standard
-    let userKey = "User"
-    let kickboardKey = "Kickboard"
-    let userRideRecordKey = "UserRideRecord"
+    static let userDefaults = UserDefaults.standard
     
-    func saveUser(user: User) {
-         do {
-             let userData = try JSONEncoder().encode(user)
-             userDefaults.set(userData, forKey: userKey)
-         } catch {
-             print("Failed to save user: \(error.localizedDescription)")
-         }
-     }
+    static let userKey = "User"
+    static let kickboardKey = "Kickboard"
+    static let userRideRecordKey = "UserRideRecord"
+    
+    static func getAllKickboardList() -> [Kickboard] {
+        
+        guard let kickboardData = userDefaults.value(forKey: StorageManager.kickboardKey) as? Data,
+              let kickboardList = try? PropertyListDecoder().decode([Kickboard].self, from: kickboardData) else { return [] }
+        
+        return kickboardList
+    }
 }
 
 struct User: Codable {
@@ -103,4 +99,3 @@ var dummyData: [Kickboard] = [
               locationY: 37.9747,
               userID: nil)
 ]
-var dummyKey: String = "dummyData"
