@@ -99,7 +99,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Button"/>
                                 <connections>
-                                    <segue destination="ezt-ZF-rmh" kind="show" id="5Mw-cV-BLp"/>
+                                    <segue destination="ezt-ZF-rmh" kind="modal" modalPresentationStyle="fullScreen" id="5Mw-cV-BLp"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rY9-Wb-ldf">
@@ -126,7 +126,7 @@
             <objects>
                 <viewController id="iMi-ir-ecE" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vhM-ze-HWT">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="XAB-vu-CuH"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -142,7 +142,7 @@
             <objects>
                 <viewController storyboardIdentifier="RegistraionViewController" id="6qs-Vl-0Va" customClass="RegistraionViewController" customModule="kickboard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Grf-lN-Hxt">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="현위치" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fci-q3-eUK">
@@ -214,7 +214,7 @@
             <objects>
                 <viewController id="XDx-y0-R8L" customClass="MapViewController" customModule="kickboard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1EV-ld-U5t">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="jYX-x9-Llp"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -233,7 +233,7 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Zla-qi-hKP">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
                         <segue destination="XDx-y0-R8L" kind="relationship" relationship="viewControllers" id="EVK-G9-HDG"/>
