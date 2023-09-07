@@ -15,26 +15,68 @@ class StorageManager {
     static let userRideRecordKey = "UserRideRecord"
     
     static func getAllKickboardList() -> [Kickboard] {
-        
-        guard let kickboardData = userDefaults.value(forKey: StorageManager.kickboardKey) as? Data,
+        guard let kickboardData = userDefaults.value(forKey: kickboardKey) as? Data,
               let kickboardList = try? PropertyListDecoder().decode([Kickboard].self, from: kickboardData) else { return [] }
         
         return kickboardList
+    }
+    
+    static func fetchUser() -> User? {
+        guard let userData = userDefaults.object(forKey: userKey) as? Data else {
+            return nil
+        }
+        
+        do {
+            let user = try JSONDecoder().decode(User.self, from: userData)
+            return user
+        } catch {
+            print("불러오기 실패")
+            return nil
+        }
+    }
+    
+    static func getAllUserRideRecord() -> [UserRideRecord] {
+        guard let rideData = userDefaults.value(forKey: userRideRecordKey) as? Data,
+              let rideList = try? PropertyListDecoder().decode([UserRideRecord].self, from: rideData) else { return [] }
+        
+        return rideList
+    }
+
+    static func updateUserKickboardStatus(isRiding: Bool) {
+        var newUser = fetchUser()
+        newUser?.kickboardStatus = isRiding
+        
+        userDefaults.set(newUser, forKey: userKey)
+    }
+
+    static func updateKickboard(kickboard: Kickboard) {
+        var allList = getAllKickboardList()
+        var list = allList.filter { $0.number == kickboard.number }
+        list[0] = kickboard
+        allList.append(list[0])
+        
+        userDefaults.set(allList, forKey: kickboardKey)
+    }
+    
+    static func insertUserRideRecord(record: UserRideRecord) {
+        var allList = getAllUserRideRecord()
+        allList.append(record)
+        userDefaults.set(allList, forKey: userRideRecordKey)
     }
 }
 
 struct User: Codable {
     let userID: String
     let password: String
-    let kickboardStatus: Bool
+    var kickboardStatus: Bool
 }
 
 struct Kickboard: Codable {
     let number: Int
-    let kickboardStatus: Bool
-    let locationX: Double // 경도
-    let locationY: Double // 위도
-    let userID: String?
+    var kickboardStatus: Bool
+    var locationX: Double // 경도
+    var locationY: Double // 위도
+    var userID: String?
 }
 
 struct UserRideRecord: Codable {
