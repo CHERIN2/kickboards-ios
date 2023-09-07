@@ -8,7 +8,7 @@
 import UIKit
 
 class StorageManager {
-    
+  
     private let userDefaults = UserDefaults.standard
     let userKey = "User"
     let kickboardKey = "Kickboard"
@@ -52,6 +52,19 @@ class StorageManager {
         } else {
             print("로그인 실패: 유저 데이터가 없습니다.")
         }
+      
+    static let userDefaults = UserDefaults.standard
+    
+    static let userKey = "User"
+    static let kickboardKey = "Kickboard"
+    static let userRideRecordKey = "UserRideRecord"
+    
+    static func getAllKickboardList() -> [Kickboard] {
+        
+        guard let kickboardData = userDefaults.value(forKey: StorageManager.kickboardKey) as? Data,
+              let kickboardList = try? PropertyListDecoder().decode([Kickboard].self, from: kickboardData) else { return [] }
+        
+        return kickboardList
     }
 }
     

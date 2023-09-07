@@ -7,24 +7,31 @@
 
 import UIKit
 import GoogleMaps
+import GooglePlaces
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
+class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         print("Appdelegate")
-        GMSServices.provideAPIKey("AIzaSyA0QLhsa_4VYNSoX0tackGmZy5pdtwWjsk")
-        
+    
+        //MARK: - Add DummyData
         let isFirstLaunchKey: String = "isFirstLaunch"
         let isFirstLaunch = UserDefaults.standard.bool(forKey: isFirstLaunchKey)
         
         if !isFirstLaunch {
-            UserDefaults.standard.set(try? PropertyListEncoder().encode(dummyData), forKey: dummyKey)
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(dummyData), forKey: StorageManager.kickboardKey)
             UserDefaults.standard.set(true, forKey: isFirstLaunchKey)
         }
+
+        //MARK: - Request User's Location
+        GMSServices.provideAPIKey("AIzaSyA0QLhsa_4VYNSoX0tackGmZy5pdtwWjsk")
+        GMSPlacesClient.provideAPIKey("AIzaSyA0QLhsa_4VYNSoX0tackGmZy5pdtwWjsk")
+        let locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
 
         return true
     }
