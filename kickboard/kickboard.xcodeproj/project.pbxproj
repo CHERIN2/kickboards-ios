@@ -10,6 +10,7 @@
 		086CCCD72AA6C84100E0EF8B /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086CCCD62AA6C84100E0EF8B /* MapViewController.swift */; };
 		0A01F0AE2AA75AD0009D4241 /* RegistraionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A01F0AD2AA75AD0009D4241 /* RegistraionViewController.swift */; };
 		0A01F0B02AA75BF6009D4241 /* KickboardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A01F0AF2AA75BF6009D4241 /* KickboardTableViewCell.swift */; };
+		0A4CBB3F2AA96B6F008020AF /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4CBB3E2AA96B6F008020AF /* Utility.swift */; };
 		0A7168912AA70A3D00646203 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7168902AA70A3D00646203 /* Model.swift */; };
 		1B20B4912AA6F70D00E2EB2D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1B20B4902AA6F70D00E2EB2D /* SnapKit */; };
 		1B6F85A52AA56E1700E2EEE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6F85A42AA56E1700E2EEE8 /* AppDelegate.swift */; };
@@ -40,6 +41,7 @@
 		086CCCD62AA6C84100E0EF8B /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		0A01F0AD2AA75AD0009D4241 /* RegistraionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistraionViewController.swift; sourceTree = "<group>"; };
 		0A01F0AF2AA75BF6009D4241 /* KickboardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KickboardTableViewCell.swift; sourceTree = "<group>"; };
+		0A4CBB3E2AA96B6F008020AF /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		0A7168902AA70A3D00646203 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		1B6F85A12AA56E1700E2EEE8 /* kickboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kickboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B6F85A42AA56E1700E2EEE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				086CCCD62AA6C84100E0EF8B /* MapViewController.swift */,
 				0A01F0AD2AA75AD0009D4241 /* RegistraionViewController.swift */,
 				0A01F0AF2AA75BF6009D4241 /* KickboardTableViewCell.swift */,
+				0A4CBB3E2AA96B6F008020AF /* Utility.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A4CBB3F2AA96B6F008020AF /* Utility.swift in Sources */,
 				0A01F0B02AA75BF6009D4241 /* KickboardTableViewCell.swift in Sources */,
 				0A01F0AE2AA75AD0009D4241 /* RegistraionViewController.swift in Sources */,
 				0A7168912AA70A3D00646203 /* Model.swift in Sources */,
