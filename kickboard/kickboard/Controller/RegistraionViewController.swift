@@ -43,7 +43,7 @@ class RegistraionViewController: UIViewController {
         currentLocationLabel.lineBreakStrategy = .hangulWordPriority
         
         currentLocationLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(50)
+            make.top.equalToSuperview().offset(100)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
         }
@@ -52,10 +52,8 @@ class RegistraionViewController: UIViewController {
     }
     
     func setupRidingTimeLabel() {
-        ridingTimeLabel.isHidden = true
-        
         ridingTimeLabel.snp.makeConstraints { make in
-            make.top.equalTo(currentLocationLabel.snp.bottom).offset(20)
+            make.top.equalTo(currentLocationLabel.snp.bottom).offset(30)
             make.leading.equalTo(currentLocationLabel.snp.leading)
             make.trailing.equalTo(currentLocationLabel.snp.trailing)
         }
@@ -63,7 +61,7 @@ class RegistraionViewController: UIViewController {
     
     func setupKickboardTableView() {
         kickboardTableView.snp.makeConstraints { make in
-            make.top.equalTo(currentLocationLabel.snp.bottom).offset(10)
+            make.top.equalTo(ridingTimeLabel.snp.bottom).offset(10)
             make.leading.equalToSuperview()
             make.trailing.equalTo(currentLocationLabel.snp.trailing)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
