@@ -18,6 +18,7 @@ class RegistraionViewController: UIViewController {
     let hoursTextField = UITextField()
     let hours: [String] = ["1", "2", "3", "4", "5"]
     var selectedHours: String = "1 시간"
+    var selectedKickboard: Kickboard?
     
     var address: String = "현 위치"
     var kickboardsWithinRangeList: [Kickboard] = []
@@ -31,7 +32,7 @@ class RegistraionViewController: UIViewController {
         kickboardTableView.delegate = self
         
         locationManager.delegate = self
-            
+        
         setupUI()
     }
     
@@ -69,7 +70,7 @@ class RegistraionViewController: UIViewController {
         hoursTextField.layer.borderWidth = 1
         hoursTextField.addTarget(self, action: #selector(showPickerView), for: .editingDidBegin)
         view.addSubview(hoursTextField)
-
+        
         hoursTextField.snp.makeConstraints { make in
             make.top.equalTo(currentLocationLabel.snp.bottom).offset(30)
             make.leading.equalTo(ridingTimeLabel.snp.trailing).offset(10)
@@ -113,7 +114,7 @@ class RegistraionViewController: UIViewController {
         let cancelButton = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(cancelButtonTapped))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneButton = UIBarButtonItem(title: "확인", style: .done, target: self, action: #selector(doneButtonTapped))
-
+        
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
         toolBar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
@@ -154,7 +155,28 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
         cell.setupAddressLabel(latitude: kickboard.locationY, longitude: kickboard.locationX)
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        showActionSheet(title: "대여 하시겠습니까?") { [self] completion in
+            if completion {
+                let user = StorageManager.fetchUser()
+                guard let user = user else { return }
+                
+                self.selectedKickboard = self.kickboardsWithinRangeList[indexPath.row]
+                self.selectedKickboard?.kickboardStatus = true
+                self.selectedKickboard?.userID = user.userID
+                guard let kickboard = self.selectedKickboard else { return }
+                
+                let record = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
+                
+                StorageManager.updateUserKickboardStatus(isRiding: true)
+                StorageManager.updateKickboard(kickboard)
+                StorageManager.insertUserRideRecord(record)
+            }
+        }
+    }
 }
+
 
 extension RegistraionViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {

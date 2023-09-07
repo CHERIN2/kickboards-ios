@@ -49,7 +49,7 @@ class StorageManager {
         userDefaults.set(newUser, forKey: userKey)
     }
 
-    static func updateKickboard(kickboard: Kickboard) {
+    static func updateKickboard(_ kickboard: Kickboard) {
         var allList = getAllKickboardList()
         var list = allList.filter { $0.number == kickboard.number }
         list[0] = kickboard
@@ -58,7 +58,7 @@ class StorageManager {
         userDefaults.set(allList, forKey: kickboardKey)
     }
     
-    static func insertUserRideRecord(record: UserRideRecord) {
+    static func insertUserRideRecord(_ record: UserRideRecord) {
         var allList = getAllUserRideRecord()
         allList.append(record)
         userDefaults.set(allList, forKey: userRideRecordKey)
