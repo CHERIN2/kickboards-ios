@@ -15,11 +15,11 @@ class KickboardTableViewCell: UITableViewCell {
     @IBOutlet weak var addressLabel: UILabel!
     
     func setupNumberLabel(wiht number: Int) {
-        numberLabel.text = "\(number) : "
+        numberLabel.text = "\(number) 번 :"
         
         numberLabel.snp.makeConstraints({ make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview()
+            make.leading.equalToSuperview().offset(20)
+            make.centerY.equalToSuperview()
         })
     }
     
@@ -39,9 +39,9 @@ class KickboardTableViewCell: UITableViewCell {
         addressLabel.lineBreakStrategy = .hangulWordPriority
         
         addressLabel.snp.makeConstraints({ make in
-            make.top.equalToSuperview()
-            make.leading.equalTo(numberLabel.snp.trailing).offset(20)
+            make.leading.equalTo(numberLabel.snp.trailing).offset(5)
             make.trailing.equalToSuperview()
+            make.centerY.equalToSuperview()
         })
     }
     

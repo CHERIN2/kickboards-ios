@@ -63,8 +63,8 @@ class RegistraionViewController: UIViewController {
     
     func setupKickboardTableView() {
         kickboardTableView.snp.makeConstraints { make in
-            make.top.equalTo(ridingTimeLabel.snp.bottom).offset(20)
-            make.leading.equalTo(currentLocationLabel.snp.leading)
+            make.top.equalTo(currentLocationLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview()
             make.trailing.equalTo(currentLocationLabel.snp.trailing)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
@@ -90,6 +90,15 @@ class RegistraionViewController: UIViewController {
 }
 
 extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "현 위치에서 500미터 반경 안에 있는 킥보드"
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return kickboardsWithinRangeList.count
     }
