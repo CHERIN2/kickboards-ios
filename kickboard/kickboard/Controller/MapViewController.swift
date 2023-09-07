@@ -15,15 +15,17 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     private let defaultLongitude: CLLocationDegrees = 126.9768
 
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewDidLoad")
+
         initializeMapView()
         placeKickboardMarkers()
         setupFloatingButton()
         setupSearchBar()
         setUpConstraints()
 //        searchBar.becomeFirstResponder()
+        
     }
     
     // MARK: - MapView Setup
@@ -32,12 +34,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         self.view = mapView
         mapView.delegate = self
         locationManager.delegate = self
-        
-        
     }
-    
- 
-
     
     // MARK: - KickBoard Marker
     private func placeKickboardMarkers() {
@@ -45,6 +42,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(latitude: kickboard.locationY, longitude: kickboard.locationX)
             marker.title = "\(kickboard.number)"
+            marker.userData = kickboard
             
             if kickboard.kickboardStatus {
                 marker.icon = UIImage(systemName: "circle.fill")
@@ -53,6 +51,16 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
             }
             marker.map = mapView
         }
+    }
+    
+    
+    // MARK: - Action Sheet
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        if let kickboard = marker.userData as? Kickboard {
+            print("action sheet")
+            return true
+        }
+        return false
     }
 
     
@@ -64,24 +72,21 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
             make.trailing.equalTo(view).offset(-20)
             
             searchBar.snp.makeConstraints { make in
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
                 make.left.right.equalTo(view)
                 make.height.equalTo(44)
             }
         }
-
- 
     }
     
     // MARK: - SearchBar setup
     private func setupSearchBar() {
         searchBar = UISearchBar()
         searchBar.placeholder = "Search Location"
-        view.addSubview(searchBar)
         searchBar.delegate = self
-
+        searchBar.isUserInteractionEnabled = true
+        view.addSubview(searchBar)
     }
-
     
     //MARK: - FlotingButton Setup
     private func setupFloatingButton() {
@@ -144,12 +149,18 @@ extension MapViewController: CLLocationManagerDelegate {
 //MARK: - SearchBar Delegate
 
 extension MapViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("제발1")
+    }
+    
+    
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        print("제발")
-
+        print("제발2")
         let autocompleteController = GMSAutocompleteViewController()
         autocompleteController.delegate = self
-        present(autocompleteController, animated: true, completion: nil)
+        self.present(autocompleteController, animated: true, completion: nil)
+
     }
 }
 
@@ -164,12 +175,12 @@ extension MapViewController: GMSAutocompleteViewControllerDelegate {
         dismiss(animated: true, completion: nil)
     }
 
-    func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
-        print("Error: \(error.localizedDescription)")
-    }
-
     func wasCancelled(_ viewController: GMSAutocompleteViewController) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
+        print("GMSAutocompleteViewController error")
     }
 }
 

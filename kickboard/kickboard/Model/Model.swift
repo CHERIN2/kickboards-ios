@@ -5,6 +5,9 @@
 //  Created by Jooyeon Kang on 2023/09/05.
 //
 
+
+
+
 import UIKit
 
 class StorageManager {
@@ -13,6 +16,15 @@ private let userDefaults = UserDefaults.standard
     let userKey = "User"
     let kickboardKey = "Kickboard"
     let userRideRecordKey = "UserRideRecord"
+    
+    func saveUser(user: User) {
+         do {
+             let userData = try JSONEncoder().encode(user)
+             userDefaults.set(userData, forKey: userKey)
+         } catch {
+             print("Failed to save user: \(error.localizedDescription)")
+         }
+     }
 }
 
 struct User: Codable {
