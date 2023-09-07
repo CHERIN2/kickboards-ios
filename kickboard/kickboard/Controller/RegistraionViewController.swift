@@ -35,6 +35,7 @@ class RegistraionViewController: UIViewController {
         setupCurrentLocationLabel()
         setupRidingTimeLabel()
         setupKickboardTableView()
+        setupHoursTextField()
     }
     
     func setupCurrentLocationLabel() {
@@ -55,6 +56,21 @@ class RegistraionViewController: UIViewController {
         ridingTimeLabel.snp.makeConstraints { make in
             make.top.equalTo(currentLocationLabel.snp.bottom).offset(30)
             make.leading.equalTo(currentLocationLabel.snp.leading)
+        }
+    }
+    
+    func setupHoursTextField() {
+        
+        let hoursTextField = UITextField()
+        hoursTextField.placeholder = "시간을 선택해 주세요"
+        hoursTextField.layer.borderColor = UIColor.gray.cgColor
+        hoursTextField.layer.borderWidth = 1
+        hoursTextField.addTarget(self, action: #selector(showPickerView), for: .editingDidBegin)
+        view.addSubview(hoursTextField)
+
+        hoursTextField.snp.makeConstraints { make in
+            make.top.equalTo(currentLocationLabel.snp.bottom).offset(30)
+            make.leading.equalTo(ridingTimeLabel.snp.trailing).offset(10)
             make.trailing.equalTo(currentLocationLabel.snp.trailing)
         }
     }
@@ -84,6 +100,9 @@ class RegistraionViewController: UIViewController {
                 kickboardsWithinRangeList.append(kickboard)
             }
         }
+    }
+    
+    @objc func showPickerView() {
     }
 }
 
