@@ -93,7 +93,7 @@ class RegistraionViewController: UIViewController {
     }
     
     func findKickboards(within range: Double, at location: CLLocation) {
-        let availableKickboardList = StorageManager.getAllKickboardList().filter { $0.kickboardStatus }
+        let availableKickboardList = StorageManager.getAllKickboardList().filter { $0.kickboardStatus == false }
         
         for kickboard in availableKickboardList {
             let kickboardLocation = CLLocation(latitude: kickboard.locationY, longitude: kickboard.locationX)
