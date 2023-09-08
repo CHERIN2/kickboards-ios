@@ -16,7 +16,7 @@ class StorageManager {
     static let userRideRecordKey = "UserRideRecord"
     
     //MARK: - Save Userdata
-    static func saveUser(user: User) {
+    static func saveUser(user: [User]) {
         do {
             let userData = try PropertyListEncoder().encode(user)
             userDefaults.set(userData, forKey: userKey)
@@ -26,13 +26,29 @@ class StorageManager {
     }
     
     //MARK: - Fetch UserData
-    static func fetchUser() -> User? {
+    static func fetchAllUser() -> [User]? {
         guard let userData = userDefaults.object(forKey: userKey) as? Data else {
             return nil
         }
         
         do {
-            let user = try PropertyListDecoder().decode(User.self, from: userData)
+            let allUser = try PropertyListDecoder().decode([User].self, from: userData)
+            return allUser
+        } catch {
+            print("user 불러오기 실패")
+            return nil
+        }
+    }
+    
+    //MARK: - Fetch UserData
+    static func fetchUserIsLogined() -> User? {
+        guard let userData = userDefaults.object(forKey: userKey) as? Data else {
+            return nil
+        }
+        
+        do {
+            let users = try PropertyListDecoder().decode([User].self, from: userData)
+            let user = users.filter { $0.isLogined }.first
             return user
         } catch {
             print("user 불러오기 실패")
@@ -56,18 +72,40 @@ class StorageManager {
         return rideList
     }
 
-    static func updateUserKickboardStatus(isRiding: Bool) {
-        var newUser = fetchUser()
-        newUser?.kickboardStatus = isRiding
+    static func updateUserKickboardStatus() {
+        guard var allUser = fetchAllUser() else { return }
+        guard let userIsLogined = fetchUserIsLogined() else { return }
         
-        userDefaults.set(try? PropertyListEncoder().encode(newUser), forKey: userKey)
+        for (index, i) in allUser.enumerated() {
+            if i.userID == userIsLogined.userID {
+                allUser[index].kickboardStatus.toggle()
+            }
+        }
+        
+        userDefaults.set(try? PropertyListEncoder().encode(allUser), forKey: userKey)
+    }
+    
+    static func updateUserIsLogined() {
+        guard var allUser = fetchAllUser() else { return }
+        guard let userIsLogined = fetchUserIsLogined() else { return }
+        
+        for (index, i) in allUser.enumerated() {
+            if i.userID == userIsLogined.userID {
+                allUser[index].isLogined.toggle()
+            }
+        }
+        
+        userDefaults.set(try? PropertyListEncoder().encode(allUser), forKey: userKey)
     }
 
     static func updateKickboard(_ kickboard: Kickboard) {
         var allList = getAllKickboardList()
-        var list = allList.filter { $0.number == kickboard.number }
-        list[0] = kickboard
-        allList.append(list[0])
+        
+        for (index, i) in allList.enumerated() {
+            if i.number == kickboard.number {
+                allList[index] = kickboard
+            }
+        }
         
         userDefaults.set(try? PropertyListEncoder().encode(allList), forKey: kickboardKey)
     }
@@ -84,6 +122,7 @@ struct User: Codable, Equatable {
     let userID: String
     let password: String
     var kickboardStatus: Bool
+    var isLogined: Bool
 }
 
 struct Kickboard: Codable {
