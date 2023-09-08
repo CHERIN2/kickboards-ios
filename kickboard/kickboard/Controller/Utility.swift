@@ -9,11 +9,9 @@ import UIKit
 
 extension UIViewController {
     
-    func showActionSheet(title: String, completion: @escaping (Bool) -> Void) {
+    func showActionSheet(title: String) {
         let cancel = UIAlertAction(title: "취소", style: .destructive)
-        let action = UIAlertAction(title: "확인", style: .default) { _ in
-            completion(true)
-        }
+        let action = UIAlertAction(title: "확인", style: .default) 
         
         let actionSheetController = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
         

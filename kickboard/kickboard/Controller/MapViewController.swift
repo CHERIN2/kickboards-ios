@@ -37,29 +37,26 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     
     // MARK: - KickBoard Marker
     private func placeKickboardMarkers() {
+        let kickboardMarker = GMSMarker()
         for kickboard in dummyData {
-            let marker = GMSMarker()
-            marker.position = CLLocationCoordinate2D(latitude: kickboard.locationY, longitude: kickboard.locationX)
-            marker.title = "\(kickboard.number)"
-            marker.userData = kickboard
+            kickboardMarker.position = CLLocationCoordinate2D(latitude: kickboard.locationY, longitude: kickboard.locationX)
+            kickboardMarker.title = "\(kickboard.number)"
             
             if kickboard.kickboardStatus {
-                marker.icon = UIImage(systemName: "circle.fill")
+                kickboardMarker.icon = UIImage(systemName: "circle.fill")
             } else {
-                marker.icon = UIImage(systemName: "circle")
+                kickboardMarker.icon = UIImage(systemName: "circle")
             }
-            marker.map = mapView
+            kickboardMarker.map = mapView
         }
     }
     
     
     // MARK: - Action Sheet
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        if let kickboard = marker.userData as? Kickboard {
             print("action sheet")
-            return true
-        }
-        return false
+        self.showActionSheet(title: "\(marker.title!)번 킥보드 🛴")
+        return true
     }
 
     
@@ -142,7 +139,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
 
 // MARK: - Find Current Location (CLLocationManagerDelegate)
 extension MapViewController: CLLocationManagerDelegate {
-    
+        
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         setupCameraPosition(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
@@ -159,7 +156,6 @@ extension MapViewController: CLLocationManagerDelegate {
 extension MapViewController: UISearchBarDelegate {
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        print("제발2")
         let autocompleteController = GMSAutocompleteViewController()
         autocompleteController.delegate = self
         self.present(autocompleteController, animated: true, completion: nil)
