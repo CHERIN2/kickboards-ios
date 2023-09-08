@@ -15,7 +15,7 @@ class StorageManager {
     static let kickboardKey = "Kickboard"
     static let userRideRecordKey = "UserRideRecord"
     
-    //MARK: - userdata save
+    //MARK: - Save Userdata
     static func saveUser(user: User) {
         do {
             let userData = try PropertyListEncoder().encode(user)
@@ -25,7 +25,7 @@ class StorageManager {
         }
     }
     
-    //MARK: - userdata fetch
+    //MARK: - Fetch UserData
     static func fetchUser() -> User? {
         guard let userData = userDefaults.object(forKey: userKey) as? Data else {
             return nil
@@ -40,10 +40,12 @@ class StorageManager {
         }
     }
     
+    //MARK: - Save Kick
+    
+    //MARK: - Fetch Kickboard Data
     static func getAllKickboardList() -> [Kickboard] {
         guard let kickboardData = userDefaults.value(forKey: kickboardKey) as? Data,
               let kickboardList = try? PropertyListDecoder().decode([Kickboard].self, from: kickboardData) else { return [] }
-        
         return kickboardList
     }
 }
