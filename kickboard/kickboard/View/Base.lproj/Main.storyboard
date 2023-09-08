@@ -191,7 +191,6 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="usedKick" destination="Ukt-HR-P8A" id="Teu-C2-EmF"/>
-                                            <outlet property="usedkick" destination="Ukt-HR-P8A" id="4Gk-r9-GsD"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
