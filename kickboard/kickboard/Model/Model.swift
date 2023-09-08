@@ -8,6 +8,51 @@
 import UIKit
 
 class StorageManager {
+  
+    private let userDefaults = UserDefaults.standard
+    let userKey = "User"
+    let kickboardKey = "Kickboard"
+    let userRideRecordKey = "UserRideRecord"
+    
+    //MARK: - userdata save
+    func saveUser(user: User) {
+        do {
+            let userData = try JSONEncoder().encode(user)
+            userDefaults.set(userData, forKey: userKey)
+        } catch {
+            print("저장실패")
+        }
+    }
+    
+    //MARK: - userdata fetch
+    func fetchUser() -> User? {
+        guard let userData = userDefaults.object(forKey: userKey) as? Data else {
+            return nil
+        }
+        
+        do {
+            let user = try JSONDecoder().decode(User.self, from: userData)
+            return user
+        } catch {
+            print("불러오기 실패")
+            return nil
+        }
+    }
+    
+    //MARK: - userdata comparison -> login
+    func loginUser(userToLogin: User) {
+        if let savedUser = fetchUser() {
+            
+            if savedUser == userToLogin {
+                print("로그인 성공")
+            } else {
+                print("로그인 실패: 유저 데이터가 일치하지 않습니다.")
+            }
+            
+        } else {
+            print("로그인 실패: 유저 데이터가 없습니다.")
+        }
+      
     static let userDefaults = UserDefaults.standard
     
     static let userKey = "User"
@@ -22,8 +67,8 @@ class StorageManager {
         return kickboardList
     }
 }
-
-struct User: Codable {
+    
+struct User: Codable, Equatable {
     let userID: String
     let password: String
     let kickboardStatus: Bool
@@ -99,3 +144,5 @@ var dummyData: [Kickboard] = [
               locationY: 37.9747,
               userID: nil)
 ]
+    
+var dummyKey: String = "dummyData"
