@@ -48,20 +48,50 @@ class StorageManager {
               let kickboardList = try? PropertyListDecoder().decode([Kickboard].self, from: kickboardData) else { return [] }
         return kickboardList
     }
+    
+    static func getAllUserRideRecord() -> [UserRideRecord] {
+        guard let rideData = userDefaults.value(forKey: userRideRecordKey) as? Data,
+              let rideList = try? PropertyListDecoder().decode([UserRideRecord].self, from: rideData) else { return [] }
+        
+        return rideList
+    }
+
+    static func updateUserKickboardStatus(isRiding: Bool) {
+        var newUser = fetchUser()
+        newUser?.kickboardStatus = isRiding
+        
+        userDefaults.set(try? PropertyListEncoder().encode(newUser), forKey: userKey)
+    }
+
+    static func updateKickboard(_ kickboard: Kickboard) {
+        var allList = getAllKickboardList()
+        var list = allList.filter { $0.number == kickboard.number }
+        list[0] = kickboard
+        allList.append(list[0])
+        
+        userDefaults.set(try? PropertyListEncoder().encode(allList), forKey: kickboardKey)
+    }
+    
+    static func insertUserRideRecord(_ record: UserRideRecord) {
+        var allList = getAllUserRideRecord()
+        allList.append(record)
+        
+        userDefaults.set(try? PropertyListEncoder().encode(allList), forKey: userRideRecordKey)
+    }
 }
     
 struct User: Codable, Equatable {
     let userID: String
     let password: String
-    let kickboardStatus: Bool
+    var kickboardStatus: Bool
 }
 
 struct Kickboard: Codable {
     let number: Int
-    let kickboardStatus: Bool
-    let locationX: Double // 경도
-    let locationY: Double // 위도
-    let userID: String?
+    var kickboardStatus: Bool
+    var locationX: Double // 경도
+    var locationY: Double // 위도
+    var userID: String?
 }
 
 struct UserRideRecord: Codable {

@@ -15,10 +15,15 @@ class RegistraionViewController: UIViewController {
     @IBOutlet weak var ridingTimeLabel: UILabel!
     @IBOutlet weak var kickboardTableView: UITableView!
     
-    let locationManager = CLLocationManager()
+    let hoursTextField = UITextField()
+    let hours: [String] = ["1", "2", "3", "4", "5"]
+    var selectedHours: String = "1 시간"
+    var selectedKickboard: Kickboard?
     
     var address: String = "현 위치"
     var kickboardsWithinRangeList: [Kickboard] = []
+    
+    let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +32,7 @@ class RegistraionViewController: UIViewController {
         kickboardTableView.delegate = self
         
         locationManager.delegate = self
-            
+        
         setupUI()
     }
     
@@ -35,6 +40,7 @@ class RegistraionViewController: UIViewController {
         setupCurrentLocationLabel()
         setupRidingTimeLabel()
         setupKickboardTableView()
+        setupHoursTextField()
     }
     
     func setupCurrentLocationLabel() {
@@ -43,7 +49,7 @@ class RegistraionViewController: UIViewController {
         currentLocationLabel.lineBreakStrategy = .hangulWordPriority
         
         currentLocationLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(50)
+            make.top.equalToSuperview().offset(100)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
         }
@@ -52,18 +58,29 @@ class RegistraionViewController: UIViewController {
     }
     
     func setupRidingTimeLabel() {
-        ridingTimeLabel.isHidden = true
-        
         ridingTimeLabel.snp.makeConstraints { make in
-            make.top.equalTo(currentLocationLabel.snp.bottom).offset(20)
+            make.top.equalTo(currentLocationLabel.snp.bottom).offset(30)
             make.leading.equalTo(currentLocationLabel.snp.leading)
+        }
+    }
+    
+    func setupHoursTextField() {
+        hoursTextField.placeholder = "시간을 선택해 주세요"
+        hoursTextField.layer.borderColor = UIColor.gray.cgColor
+        hoursTextField.layer.borderWidth = 1
+        hoursTextField.addTarget(self, action: #selector(showPickerView), for: .editingDidBegin)
+        view.addSubview(hoursTextField)
+        
+        hoursTextField.snp.makeConstraints { make in
+            make.top.equalTo(currentLocationLabel.snp.bottom).offset(30)
+            make.leading.equalTo(ridingTimeLabel.snp.trailing).offset(10)
             make.trailing.equalTo(currentLocationLabel.snp.trailing)
         }
     }
     
     func setupKickboardTableView() {
         kickboardTableView.snp.makeConstraints { make in
-            make.top.equalTo(currentLocationLabel.snp.bottom).offset(10)
+            make.top.equalTo(ridingTimeLabel.snp.bottom).offset(10)
             make.leading.equalToSuperview()
             make.trailing.equalTo(currentLocationLabel.snp.trailing)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
@@ -87,6 +104,33 @@ class RegistraionViewController: UIViewController {
             }
         }
     }
+    
+    @objc func showPickerView() {
+        let pickerView = UIPickerView()
+        pickerView.dataSource = self
+        pickerView.delegate = self
+        hoursTextField.inputView = pickerView
+        
+        let cancelButton = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(cancelButtonTapped))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "확인", style: .done, target: self, action: #selector(doneButtonTapped))
+        
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        toolBar.setItems([cancelButton, flexibleSpace, doneButton], animated: false)
+        hoursTextField.inputAccessoryView = toolBar
+        
+        hoursTextField.text = selectedHours
+    }
+    
+    @objc func cancelButtonTapped() {
+        hoursTextField.text = nil
+        hoursTextField.resignFirstResponder()
+    }
+    
+    @objc func doneButtonTapped() {
+        hoursTextField.resignFirstResponder()
+    }
 }
 
 extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate {
@@ -104,13 +148,53 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         let kickboard = kickboardsWithinRangeList[indexPath.row]
         
         let cell = kickboardTableView.dequeueReusableCell(withIdentifier: "KickboardTableViewCell", for: indexPath) as! KickboardTableViewCell
         cell.setupNumberLabel(wiht: kickboard.number)
         cell.setupAddressLabel(latitude: kickboard.locationY, longitude: kickboard.locationX)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        showActionSheet(title: "대여 하시겠습니까?") { [self] completion in
+            if completion {
+                let user = StorageManager.fetchUser()
+                guard let user = user else { return }
+                
+                self.selectedKickboard = self.kickboardsWithinRangeList[indexPath.row]
+                self.selectedKickboard?.kickboardStatus = true
+                self.selectedKickboard?.userID = user.userID
+                guard let kickboard = self.selectedKickboard else { return }
+                
+                let record = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
+                
+                StorageManager.updateUserKickboardStatus(isRiding: true)
+                StorageManager.updateKickboard(kickboard)
+                StorageManager.insertUserRideRecord(record)
+            }
+        }
+    }
+}
+
+
+extension RegistraionViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return hours.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return "\(hours[row]) 시간"
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectedHours = "\(hours[row]) 시간"
+        hoursTextField.text = selectedHours
+        hoursTextField.resignFirstResponder()
     }
 }
 

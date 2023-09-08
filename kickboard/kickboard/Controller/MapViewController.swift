@@ -55,7 +55,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     // MARK: - Action Sheet
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
             print("action sheet")
-        self.showActionSheet(title: "\(marker.title!)번 킥보드 🛴")
+//        self.showActionSheet(title: "\(marker.title!)번 킥보드 🛴")
         return true
     }
 
