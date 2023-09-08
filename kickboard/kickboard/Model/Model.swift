@@ -49,20 +49,6 @@ class StorageManager {
         return kickboardList
     }
     
-    static func fetchUser() -> User? {
-        guard let userData = userDefaults.object(forKey: userKey) as? Data else {
-            return nil
-        }
-        
-        do {
-            let user = try JSONDecoder().decode(User.self, from: userData)
-            return user
-        } catch {
-            print("불러오기 실패")
-            return nil
-        }
-    }
-    
     static func getAllUserRideRecord() -> [UserRideRecord] {
         guard let rideData = userDefaults.value(forKey: userRideRecordKey) as? Data,
               let rideList = try? PropertyListDecoder().decode([UserRideRecord].self, from: rideData) else { return [] }
@@ -74,7 +60,7 @@ class StorageManager {
         var newUser = fetchUser()
         newUser?.kickboardStatus = isRiding
         
-        userDefaults.set(newUser, forKey: userKey)
+        userDefaults.set(try? PropertyListEncoder().encode(newUser), forKey: userKey)
     }
 
     static func updateKickboard(_ kickboard: Kickboard) {
@@ -83,13 +69,14 @@ class StorageManager {
         list[0] = kickboard
         allList.append(list[0])
         
-        userDefaults.set(allList, forKey: kickboardKey)
+        userDefaults.set(try? PropertyListEncoder().encode(allList), forKey: kickboardKey)
     }
     
     static func insertUserRideRecord(_ record: UserRideRecord) {
         var allList = getAllUserRideRecord()
         allList.append(record)
-        userDefaults.set(allList, forKey: userRideRecordKey)
+        
+        userDefaults.set(try? PropertyListEncoder().encode(allList), forKey: userRideRecordKey)
     }
 }
     
