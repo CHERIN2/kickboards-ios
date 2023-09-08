@@ -157,21 +157,25 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showActionSheet(title: "대여 하시겠습니까?") { [self] completion in
-            if completion {
-                let user = StorageManager.fetchUser()
-                guard let user = user else { return }
-                
-                self.selectedKickboard = self.kickboardsWithinRangeList[indexPath.row]
-                self.selectedKickboard?.kickboardStatus = true
-                self.selectedKickboard?.userID = user.userID
-                guard let kickboard = self.selectedKickboard else { return }
-                
-                let record = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
-                
-                StorageManager.updateUserKickboardStatus(isRiding: true)
-                StorageManager.updateKickboard(kickboard)
-                StorageManager.insertUserRideRecord(record)
+        if hoursTextField.text == "" {
+            showAlert(title: "필수항목", message: "시간을 입력해 주세요")
+        } else {
+            showActionSheet(title: "대여 하시겠습니까?") { [self] completion in
+                if completion {
+                    let user = StorageManager.fetchUser()
+                    guard let user = user else { return }
+                    
+                    self.selectedKickboard = self.kickboardsWithinRangeList[indexPath.row]
+                    self.selectedKickboard?.kickboardStatus = true
+                    self.selectedKickboard?.userID = user.userID
+                    guard let kickboard = self.selectedKickboard else { return }
+                    
+                    let record = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
+                    
+                    StorageManager.updateUserKickboardStatus(isRiding: true)
+                    StorageManager.updateKickboard(kickboard)
+                    StorageManager.insertUserRideRecord(record)
+                }
             }
         }
     }
