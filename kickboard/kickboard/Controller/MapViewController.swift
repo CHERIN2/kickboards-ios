@@ -17,10 +17,8 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad")
         initializeMapView()
         placeKickboardMarkers()
-
         setupFloatingButton()
         setupSearchBar()
         setUpConstraints()
