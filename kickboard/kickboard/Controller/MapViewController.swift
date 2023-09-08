@@ -20,11 +20,10 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         print("viewDidLoad")
         initializeMapView()
         placeKickboardMarkers()
+
         setupFloatingButton()
         setupSearchBar()
         setUpConstraints()
-//        searchBar.becomeFirstResponder()
-        
     }
     
     // MARK: - MapView Setup
@@ -37,8 +36,11 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     
     // MARK: - KickBoard Marker
     private func placeKickboardMarkers() {
-        let kickboardMarker = GMSMarker()
-        for kickboard in dummyData {
+        let kickboards = StorageManager.getAllKickboardList()
+
+        for kickboard in kickboards {
+            let kickboardMarker = GMSMarker()
+            print(kickboard.locationX)
             kickboardMarker.position = CLLocationCoordinate2D(latitude: kickboard.locationY, longitude: kickboard.locationX)
             kickboardMarker.title = "\(kickboard.number)"
             

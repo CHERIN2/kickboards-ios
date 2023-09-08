@@ -43,7 +43,7 @@ class StorageManager {
     static func getAllKickboardList() -> [Kickboard] {
         guard let kickboardData = userDefaults.value(forKey: kickboardKey) as? Data,
               let kickboardList = try? PropertyListDecoder().decode([Kickboard].self, from: kickboardData) else { return [] }
-        
+        print("::::::::::::::::::test")
         return kickboardList
     }
 }
