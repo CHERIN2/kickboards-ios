@@ -144,7 +144,11 @@ extension MapViewController: CLLocationManagerDelegate {
         
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
+        let currentMarker = GMSMarker()
         setupCameraPosition(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        currentMarker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        currentMarker.icon = UIImage(systemName: "record.circle")
+        currentMarker.map = mapView
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
