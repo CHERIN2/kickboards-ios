@@ -1,4 +1,5 @@
 import UIKit
+import SnapKit
 
 class LoginViewController: UIViewController {
     
@@ -11,7 +12,24 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var typePWField: UITextField!
     
     // MARK: - userdefault set
-    
+    @IBAction func loginTap(_ sender: Any) {
+        let login = User (userID: typeIDField.text!, password: typePWField.text ?? "", kickboardStatus: false)
+        StorageManager().fetchUser()
+        // saveUser == fetchUser
+        
+        guard let userIDEmpty = typeIDField.text, !userIDEmpty.isEmpty,
+              let userPWEmpty = typePWField.text, !userPWEmpty.isEmpty else {
+            showAlert2(message: "모든 입력란을 작성하세요")
+            return
+        }
+        
+        func showAlert2(message: String) {
+            let alert = UIAlertController(title: "입력란 확인", message: message, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+            alert.addAction(okAction)
+            present(alert, animated: true, completion: nil)
+        }
+    }
     
     // MARK: - UI SET
     override func viewDidLoad() {
@@ -32,6 +50,7 @@ class LoginViewController: UIViewController {
         
         typePWField.layer.borderColor = UIColor.black.cgColor
         typePWField.placeholder = "비밀번호를 입력해주세요"
+        typePWField.isSecureTextEntry = true
         
     }
 }

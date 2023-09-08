@@ -1,4 +1,5 @@
 import UIKit
+import SnapKit
 
 class SignInViewController: UIViewController {
     
@@ -14,18 +15,20 @@ class SignInViewController: UIViewController {
         let signtoin = User (userID: signinIDField.text!, password: signInPWField.text ?? "", kickboardStatus: false)
         StorageManager().saveUser(user: signtoin)
         
-        guard let username = signinIDField.text, !username.isEmpty,
-              let password = signInPWField.text, !password.isEmpty else {
-            showAlert(message: "모든 입력란을 작성하세요")
+        guard let usernameEmpty = signinIDField.text, !usernameEmpty.isEmpty,
+              let passwordEmpty = signInPWField.text, !passwordEmpty.isEmpty else {
+            showAlert1(message: "모든 입력란을 작성하세요")
             return
         }
         
-        func showAlert(message: String) {
-            let alert = UIAlertController(title: "경고", message: message, preferredStyle: .alert)
+        func showAlert1(message: String) {
+            let alert = UIAlertController(title: "입력란 확인", message: message, preferredStyle: .alert)
             let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
             alert.addAction(okAction)
             present(alert, animated: true, completion: nil)
         }
+        
+        
     }
     
     // MARK: - UI SET
