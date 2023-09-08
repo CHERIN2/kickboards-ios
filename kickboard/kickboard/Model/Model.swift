@@ -8,16 +8,44 @@
 import UIKit
 
 class StorageManager {
+  
     static let userDefaults = UserDefaults.standard
     
     static let userKey = "User"
     static let kickboardKey = "Kickboard"
     static let userRideRecordKey = "UserRideRecord"
     
+    //MARK: - Save Userdata
+    static func saveUser(user: User) {
+        do {
+            let userData = try PropertyListEncoder().encode(user)
+            userDefaults.set(userData, forKey: userKey)
+        } catch {
+            print("user 저장 실패")
+        }
+    }
+    
+    //MARK: - Fetch UserData
+    static func fetchUser() -> User? {
+        guard let userData = userDefaults.object(forKey: userKey) as? Data else {
+            return nil
+        }
+        
+        do {
+            let user = try PropertyListDecoder().decode(User.self, from: userData)
+            return user
+        } catch {
+            print("user 불러오기 실패")
+            return nil
+        }
+    }
+    
+    //MARK: - Save Kick
+    
+    //MARK: - Fetch Kickboard Data
     static func getAllKickboardList() -> [Kickboard] {
         guard let kickboardData = userDefaults.value(forKey: kickboardKey) as? Data,
               let kickboardList = try? PropertyListDecoder().decode([Kickboard].self, from: kickboardData) else { return [] }
-        
         return kickboardList
     }
     
@@ -64,8 +92,8 @@ class StorageManager {
         userDefaults.set(allList, forKey: userRideRecordKey)
     }
 }
-
-struct User: Codable {
+    
+struct User: Codable, Equatable {
     let userID: String
     let password: String
     var kickboardStatus: Bool
