@@ -40,7 +40,33 @@ class StorageManager {
         }
     }
     
-    //MARK: - Save Kick
+    //MARK: - getKickboard
+    
+    static func getKickboard(byNumber number: Int) -> Kickboard? {
+        return getAllKickboardList().first { $0.number == number }
+    }
+    
+    //MARK: - updateKickboardStatus
+    
+    static func updateKickboardStatus(kickboard: Kickboard) {
+        var kickboards = getAllKickboardList()
+        if let index = kickboards.firstIndex(where: { $0.number == kickboard.number }) {
+            kickboards[index].kickboardStatus.toggle()
+            saveAllKickboards(kickboards: kickboards)
+        }
+    }
+    
+    //MARK: - saveAllKickboards
+
+    static func saveAllKickboards(kickboards: [Kickboard]) {
+        do {
+            let kickboardData = try PropertyListEncoder().encode(kickboards)
+            userDefaults.set(kickboardData, forKey: kickboardKey)
+        } catch {
+            print("Kickboards 저장 실패")
+        }
+    }
+
     
     //MARK: - Fetch Kickboard Data
     static func getAllKickboardList() -> [Kickboard] {
@@ -152,7 +178,7 @@ var dummyData: [Kickboard] = [
               userID: "user_test_id_9_1"),
     Kickboard(number: 10,
               kickboardStatus: false,
-              locationX: 126.5867,
-              locationY: 37.9747,
+              locationX: 126.9759,
+              locationY: 37.5797,
               userID: nil)
 ]

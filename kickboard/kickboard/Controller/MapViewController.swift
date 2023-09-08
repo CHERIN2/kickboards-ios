@@ -34,11 +34,12 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     
     // MARK: - KickBoard Marker
     private func placeKickboardMarkers() {
+        
+        mapView.clear()
         let kickboards = StorageManager.getAllKickboardList()
 
         for kickboard in kickboards {
             let kickboardMarker = GMSMarker()
-            print(kickboard.locationX)
             kickboardMarker.position = CLLocationCoordinate2D(latitude: kickboard.locationY, longitude: kickboard.locationX)
             kickboardMarker.title = "\(kickboard.number)"
             
@@ -52,11 +53,22 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     }
     
     
-    // MARK: - Action Sheet
+    //MARK: - MapView Action Sheet
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-            print("action sheet")
-//        self.showActionSheet(title: "\(marker.title!)번 킥보드 🛴")
-        return true
+        print(marker.title)
+
+        guard let title = marker.title, let kickboardNumber = Int(title) else { return true }
+
+        if let kickboard = StorageManager.getKickboard(byNumber: kickboardNumber) {
+            self.showActionSheet(title: "\(kickboard.number)번 킥보드 🛴") { [weak self] completion in
+                if completion {
+                    print(kickboard.kickboardStatus)
+                    StorageManager.updateKickboardStatus(kickboard: kickboard)
+                     self?.placeKickboardMarkers()
+                }
+            }
+        }
+        return false
     }
 
     
