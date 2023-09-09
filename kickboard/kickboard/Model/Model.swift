@@ -28,7 +28,7 @@ class StorageManager {
     //MARK: - Fetch UserData
     static func fetchAllUser() -> [User]? {
         guard let userData = userDefaults.object(forKey: userKey) as? Data else {
-            return nil
+            return []
         }
         
         do {
@@ -85,16 +85,13 @@ class StorageManager {
         userDefaults.set(try? PropertyListEncoder().encode(allUser), forKey: userKey)
     }
     
-    static func updateUserIsLogined() {
+    static func updateUserIsLogined(_ id: String) {
         guard var allUser = fetchAllUser() else { return }
-        guard let userIsLogined = fetchUserIsLogined() else { return }
         
-        for (index, i) in allUser.enumerated() {
-            if i.userID == userIsLogined.userID {
-                allUser[index].isLogined.toggle()
-            }
+        if let index = allUser.firstIndex(where: { $0.userID == id }) {
+            allUser[index].isLogined.toggle()
         }
-        
+
         userDefaults.set(try? PropertyListEncoder().encode(allUser), forKey: userKey)
     }
 
