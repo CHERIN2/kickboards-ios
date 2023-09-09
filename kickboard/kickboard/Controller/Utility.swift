@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import GoogleMaps
 
 extension UIViewController {
+    
+    //MARK: -  알림창
     
     func showActionSheet(title: String, completion: @escaping (Bool) -> Void) {
         let cancel = UIAlertAction(title: "취소", style: .destructive)
@@ -35,6 +38,14 @@ extension UIViewController {
         present(actionSheetController, animated: true)
     }
     
+   
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    //MARK: - register Kickboard
     //true 반납
     //false 사용 등록
     //파라미터 및 함수명 변경해야함
@@ -54,3 +65,4 @@ extension UIViewController {
         StorageManager.insertUserRideRecord(record)
     }
 }
+
