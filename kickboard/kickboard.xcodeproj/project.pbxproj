@@ -13,6 +13,8 @@
 		0A4CBB3F2AA96B6F008020AF /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4CBB3E2AA96B6F008020AF /* Utility.swift */; };
 		0A7168912AA70A3D00646203 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7168902AA70A3D00646203 /* Model.swift */; };
 		1B20B4912AA6F70D00E2EB2D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1B20B4902AA6F70D00E2EB2D /* SnapKit */; };
+		1B5CADB82AAAE1DE0023CAD3 /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5CADB72AAAE1DE0023CAD3 /* MyPageViewController.swift */; };
+		1B5CADBA2AAB00D40023CAD3 /* MyPageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5CADB92AAB00D40023CAD3 /* MyPageTableViewCell.swift */; };
 		1B6F85A52AA56E1700E2EEE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6F85A42AA56E1700E2EEE8 /* AppDelegate.swift */; };
 		1B6F85A72AA56E1700E2EEE8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6F85A62AA56E1700E2EEE8 /* SceneDelegate.swift */; };
 		1B6F85A92AA56E1700E2EEE8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6F85A82AA56E1700E2EEE8 /* ViewController.swift */; };
@@ -43,6 +45,8 @@
 		0A01F0AF2AA75BF6009D4241 /* KickboardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KickboardTableViewCell.swift; sourceTree = "<group>"; };
 		0A4CBB3E2AA96B6F008020AF /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		0A7168902AA70A3D00646203 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		1B5CADB72AAAE1DE0023CAD3 /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
+		1B5CADB92AAB00D40023CAD3 /* MyPageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageTableViewCell.swift; sourceTree = "<group>"; };
 		1B6F85A12AA56E1700E2EEE8 /* kickboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kickboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B6F85A42AA56E1700E2EEE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1B6F85A62AA56E1700E2EEE8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +81,15 @@
 				0A7168902AA70A3D00646203 /* Model.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		1B5CADB62AAAE1B00023CAD3 /* Mypage */ = {
+			isa = PBXGroup;
+			children = (
+				1B5CADB72AAAE1DE0023CAD3 /* MyPageViewController.swift */,
+				1B5CADB92AAB00D40023CAD3 /* MyPageTableViewCell.swift */,
+			);
+			path = Mypage;
 			sourceTree = "<group>";
 		};
 		1B6F85982AA56E1700E2EEE8 = {
@@ -131,6 +144,7 @@
 		1B6F85BA2AA5712400E2EEE8 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				1B5CADB62AAAE1B00023CAD3 /* Mypage */,
 				1B6F85BB2AA5CE9F00E2EEE8 /* Login */,
 				1B6F85A82AA56E1700E2EEE8 /* ViewController.swift */,
 				086CCCD62AA6C84100E0EF8B /* MapViewController.swift */,
@@ -293,11 +307,13 @@
 				0A01F0B02AA75BF6009D4241 /* KickboardTableViewCell.swift in Sources */,
 				0A01F0AE2AA75AD0009D4241 /* RegistraionViewController.swift in Sources */,
 				0A7168912AA70A3D00646203 /* Model.swift in Sources */,
+				1B5CADB82AAAE1DE0023CAD3 /* MyPageViewController.swift in Sources */,
 				1B6F85A92AA56E1700E2EEE8 /* ViewController.swift in Sources */,
 				086CCCD72AA6C84100E0EF8B /* MapViewController.swift in Sources */,
 				1B6F85BD2AA5CEBF00E2EEE8 /* LoginViewController.swift in Sources */,
 				1B6F85A52AA56E1700E2EEE8 /* AppDelegate.swift in Sources */,
 				1B6F85BF2AA5E28F00E2EEE8 /* SignInViewController.swift in Sources */,
+				1B5CADBA2AAB00D40023CAD3 /* MyPageTableViewCell.swift in Sources */,
 				1B6F85A72AA56E1700E2EEE8 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
