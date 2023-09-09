@@ -30,6 +30,9 @@ class LoginViewController: UIViewController {
                 
                 // isLogined를 true로 바꿔주기
                 // 다음 화면으로 이동
+                let vc = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
+                vc.modalPresentationStyle = .fullScreen
+                present(vc, animated: false)
             }
         }
         
