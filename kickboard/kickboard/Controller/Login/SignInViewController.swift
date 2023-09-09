@@ -13,24 +13,25 @@ class SignInViewController: UIViewController {
     // MARK: - userdefault set
     @IBAction func signInTap(_ sender: Any) {
         
-        var allUsers = StorageManager.fetchAllUser()
-        let signtoin = User(userID: signinIDField.text!, password: signInPWField.text ?? "", kickboardStatus: false, isLogined: false)
-        allUsers?.append(signtoin)
-        guard let allUsers = allUsers else { return }
-        StorageManager.saveUser(user: allUsers)
-        
         guard let usernameEmpty = signinIDField.text, !usernameEmpty.isEmpty,
               let passwordEmpty = signInPWField.text, !passwordEmpty.isEmpty else {
             showAlert1(message: "모든 입력란을 작성하세요")
             return
         }
         
-        func showAlert1(message: String) {
-            let alert = UIAlertController(title: "입력란 확인", message: message, preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
-            alert.addAction(okAction)
-            present(alert, animated: true, completion: nil)
-        }
+        var allUsers = StorageManager.fetchAllUser()
+        let signtoin = User(userID: signinIDField.text!, password: signInPWField.text ?? "", kickboardStatus: false, isLogined: false)
+        allUsers?.append(signtoin)
+        guard let allUsers = allUsers else { return }
+        StorageManager.saveUser(user: allUsers)
+        
+    }
+    
+    func showAlert1(message: String) {
+        let alert = UIAlertController(title: "입력란 확인", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: - UI SET
