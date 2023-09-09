@@ -12,8 +12,12 @@ class SignInViewController: UIViewController {
     
     // MARK: - userdefault set
     @IBAction func signInTap(_ sender: Any) {
-        let signtoin = User (userID: signinIDField.text!, password: signInPWField.text ?? "", kickboardStatus: false, isLogined: true)
-//        StorageManager.saveUser(user: signtoin)
+        
+        var allUsers = StorageManager.fetchAllUser()
+        let signtoin = User(userID: signinIDField.text!, password: signInPWField.text ?? "", kickboardStatus: false, isLogined: false)
+        allUsers?.append(signtoin)
+        guard let allUsers = allUsers else { return }
+        StorageManager.saveUser(user: allUsers)
         
         guard let usernameEmpty = signinIDField.text, !usernameEmpty.isEmpty,
               let passwordEmpty = signInPWField.text, !passwordEmpty.isEmpty else {
@@ -27,8 +31,6 @@ class SignInViewController: UIViewController {
             alert.addAction(okAction)
             present(alert, animated: true, completion: nil)
         }
-        
-        
     }
     
     // MARK: - UI SET

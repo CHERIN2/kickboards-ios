@@ -13,14 +13,24 @@ class LoginViewController: UIViewController {
     
     // MARK: - userdefault set
     @IBAction func loginTap(_ sender: Any) {
-        let login = User (userID: typeIDField.text!, password: typePWField.text ?? "", kickboardStatus: false)
-        StorageManager().fetchUser()
-        // saveUser == fetchUser
         
         guard let userIDEmpty = typeIDField.text, !userIDEmpty.isEmpty,
               let userPWEmpty = typePWField.text, !userPWEmpty.isEmpty else {
             showAlert2(message: "모든 입력란을 작성하세요")
             return
+        }
+        
+        let userInfo = StorageManager.fetchAllUser()
+        guard let userInfo = userInfo else {
+            return
+        }
+        
+        for i in userInfo {
+            if i.userID == userIDEmpty && i.password == userPWEmpty {
+                
+                // isLogined를 true로 바꿔주기
+                // 다음 화면으로 이동
+            }
         }
         
         func showAlert2(message: String) {
