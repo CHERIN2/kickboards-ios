@@ -29,6 +29,15 @@ class MyPageViewController: UIViewController {
         
         recordTableView.delegate = self
         recordTableView.dataSource = self
+        
+        logOutButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
+    }
+    
+    @objc func logout() {
+        guard let user = StorageManager.fetchUserIsLogined() else { return }
+        StorageManager.updateUserIsLogined(user.userID)
+        
+        performSegue(withIdentifier: "LogoutSegue", sender: self)
     }
 }
 
