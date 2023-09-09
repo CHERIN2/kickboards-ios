@@ -12,8 +12,8 @@ class SignInViewController: UIViewController {
     
     // MARK: - userdefault set
     @IBAction func signInTap(_ sender: Any) {
-        let signtoin = User (userID: signinIDField.text!, password: signInPWField.text ?? "", kickboardStatus: false)
-        StorageManager().saveUser(user: signtoin)
+        let signtoin = User (userID: signinIDField.text!, password: signInPWField.text ?? "", kickboardStatus: false, isLogined: true)
+//        StorageManager.saveUser(user: signtoin)
         
         guard let usernameEmpty = signinIDField.text, !usernameEmpty.isEmpty,
               let passwordEmpty = signInPWField.text, !passwordEmpty.isEmpty else {
