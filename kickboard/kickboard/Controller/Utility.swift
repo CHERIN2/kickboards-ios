@@ -38,31 +38,49 @@ extension UIViewController {
         present(actionSheetController, animated: true)
     }
     
-   
+   //MARK: - 화면 가운데 팝업 알람창
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
 
-    //MARK: - register Kickboard
+    //MARK: - 대여하기
     //true 반납
     //false 사용 등록
     //파라미터 및 함수명 변경해야함
-    func  registerKickboard(_ kickboard: inout Kickboard, isReturn: Bool) {
+    func  registerKickboard(_ kickboard: inout Kickboard) {
         guard let user = StorageManager.fetchUserIsLogined() else { return }
         
         let record = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
-        
-        if isReturn {
-            
-        } else {
-            kickboard.userID = user.userID
-        }
-        
+    
         StorageManager.updateUserKickboardStatus()
         StorageManager.updateKickboard(kickboard)
         StorageManager.insertUserRideRecord(record)
+
+
+    }
+    
+    //MARK: - 반납하기
+    func returnKickboard(for coordinate: CLLocationCoordinate2D) {
+        if let user = StorageManager.fetchUserIsLogined(), let rideRecord = StorageManager.fetchUserRideRecord(for: user.userID) {
+            let currentlyRentedKickboardNumber = rideRecord.kickboardNumber
+            
+            print(":::::: 반납한 유저: \(user.userID)")
+            print(":::::: 반납한 킥보드: \(currentlyRentedKickboardNumber)")
+            
+            if let rentedKickboard = StorageManager.getKickboard(byNumber: currentlyRentedKickboardNumber) {
+                var updatedKickboard = rentedKickboard
+                updatedKickboard.kickboardStatus = false
+                updatedKickboard.locationX = coordinate.longitude
+                updatedKickboard.locationY = coordinate.latitude
+                StorageManager.updateKickboard(updatedKickboard)
+            }
+            
+            var updatedUser = user
+            updatedUser.userKickboardStatus = false
+            StorageManager.updateUserKickboardStatus()
+        }
     }
 }
 

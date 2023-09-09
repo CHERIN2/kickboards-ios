@@ -69,13 +69,13 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
                 print(kickboard.kickboardStatus)
                 
                 // 2. 현재 유저가 킥보드 사용중인지 확인
-                if let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.kickboardStatus {
+                if let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.userKickboardStatus {
                     self?.showAlert(title: "오류!", message: "이미 다른 킥보드를 사용 중입니다!")
                     return
                 }
 
                 // 대여하기 공통함수 삽입
-                self?.registerKickboard(&rentedKickboard, isReturn: true)
+                self?.registerKickboard(&rentedKickboard)
                 print("::::::대여한 킥보드: \(rentedKickboard.number)")
                 print("::::::대여한 킥보드: \(rentedKickboard.kickboardStatus)")
                 self?.placeKickboardMarkers()
@@ -91,46 +91,20 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         
         //1. 유저 킥보드 대여 상태가 true 인지 확인한다.
-        guard let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.kickboardStatus else {
+        guard let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.userKickboardStatus else {
             showAlert(title: "오류!", message: "킥보드 미사용 중입니다!")
             return
         }
         
         //2. 반납할지 묻는 알람창을 띄운다
         showActionSheet(title: "반납하기") { [weak self] _ in
-            
-            //3. (확인 누를시) 유저가 대여중인 킥보드 번호를 가져온다
-            if let user = StorageManager.fetchUserIsLogined(), let rideRecord = StorageManager.fetchUserRideRecord(for: user.userID) {
-                let currentlyRentedKickboardNumber = rideRecord.kickboardNumber
-                print(":::::: 반납한 유저: \(user.userID)")
-                print(":::::: 반납한 킥보드: \(currentlyRentedKickboardNumber)")
-                
-                //4. 대여중인 킥보드의 상태를 false로 바꾼다.
-                if let rentedKickboard = StorageManager.getKickboard(byNumber: currentlyRentedKickboardNumber) {
-                    var updatedKickboard = rentedKickboard
-                    updatedKickboard.kickboardStatus = false
-                    
-                    //5. 킥보드의 위치값을 유저가 탭한 위치(coordinate)로 바꿔준다.
-                    updatedKickboard.locationX = coordinate.longitude
-                    updatedKickboard.locationY = coordinate.latitude
-                    StorageManager.updateKickboard(updatedKickboard)
-                }
-                //6. 유저의 킥보드 대여상태를 false로 바꾼다.
-                var updatedUser = loggedUser
-                updatedUser.kickboardStatus = false
-                StorageManager.updateUserKickboardStatus()
-            }
-            
-            
-            //7. 킥보드 마커를 다시그려준다
+            self?.returnKickboard(for: coordinate)
             self?.placeKickboardMarkers()
         }
     }
     
     
-  
-    
-    
+
     
     // MARK: - Constraints Setup
     private func setUpConstraints() {

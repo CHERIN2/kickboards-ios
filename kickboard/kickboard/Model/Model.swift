@@ -104,7 +104,7 @@ class StorageManager {
         
         for (index, i) in allUser.enumerated() {
             if i.userID == userIsLogined.userID {
-                allUser[index].kickboardStatus.toggle()
+                allUser[index].userKickboardStatus.toggle()
             }
         }
         
@@ -231,11 +231,11 @@ class StorageManager {
         
         // Dummy Users
         let dummyUsers: [User] = [
-             User(userID: "user_test_id_3_1", password: "password123", kickboardStatus: false, isLogined: true),
-             User(userID: "user_test_id_5_1", password: "password123", kickboardStatus: false, isLogined: false),
-             User(userID: "user_test_id_7_1", password: "password123", kickboardStatus: false, isLogined: false),
-             User(userID: "user_test_id_4", password: "password123", kickboardStatus: false, isLogined: false),
-             User(userID: "user_test_id_8", password: "password123", kickboardStatus: false, isLogined: false)
+             User(userID: "user_test_id_3_1", password: "password123", userKickboardStatus: false, isLogined: true),
+             User(userID: "user_test_id_5_1", password: "password123", userKickboardStatus: false, isLogined: false),
+             User(userID: "user_test_id_7_1", password: "password123", userKickboardStatus: false, isLogined: false),
+             User(userID: "user_test_id_4", password: "password123", userKickboardStatus: false, isLogined: false),
+             User(userID: "user_test_id_8", password: "password123", userKickboardStatus: false, isLogined: false)
          ]
         // Dummy UserRideRecord  
         let dummyUserRideRecords: [UserRideRecord] = [
@@ -258,7 +258,7 @@ class StorageManager {
 struct User: Codable, Equatable {
     let userID: String
     let password: String
-    var kickboardStatus: Bool
+    var userKickboardStatus: Bool
     var isLogined: Bool
 }
 
