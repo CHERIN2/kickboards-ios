@@ -50,10 +50,14 @@ extension UIViewController {
     //파라미터 및 함수명 변경해야함
     func  registerKickboard(_ kickboard: inout Kickboard, isReturn: Bool) {
         
+        
+        
         //로그인된 유저정보, 픽한 킥보드정보, 사용기록정보 다끌고오기
         var user = StorageManager.fetchUserIsLogined()!
-        let rideRecord = StorageManager.fetchUserRideRecord(for: user.userID)!
-        var kickBoard = StorageManager.getKickboard(byNumber: rideRecord.kickboardNumber)
+//        let rideRecord = StorageManager.fetchUserRideRecord(for: user.userID)!
+        let newRideRecord = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
+
+        var kickBoard = StorageManager.getKickboard(byNumber: newRideRecord.kickboardNumber)
         
         print(":::::: 로그인한 유저: \(user.userID)")
         
@@ -78,7 +82,6 @@ extension UIViewController {
             kickboard.kickboardStatus = true
             kickboard.userID = user.userID
             
-            let newRideRecord = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
             StorageManager.insertUserRideRecord(newRideRecord)
 
             print(":::::: 대여한 킥보드: \(kickBoard)")
