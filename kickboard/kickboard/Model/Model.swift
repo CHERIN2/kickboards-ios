@@ -47,7 +47,7 @@ class StorageManager {
         
         do {
             let users = try PropertyListDecoder().decode([User].self, from: userData)
-            let user = users.filter { $0.isLogined }.first
+            let user = users.filter { $0.isLogined }.last
             return user
         } catch {
             print("user 불러오기 실패")

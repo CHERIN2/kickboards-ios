@@ -139,7 +139,7 @@
             </objects>
             <point key="canvasLocation" x="-619.08396946564881" y="131.69014084507043"/>
         </scene>
-        <!--Item-->
+        <!--마이페이지-->
         <scene sceneID="e27-eg-DO8">
             <objects>
                 <viewController id="iMi-ir-ecE" customClass="MyPageViewController" customModule="kickboard" customModuleProvider="target" sceneMemberID="viewController">
@@ -201,7 +201,7 @@
                         <viewLayoutGuide key="safeArea" id="XAB-vu-CuH"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="5m9-DH-Bup"/>
+                    <tabBarItem key="tabBarItem" title="마이페이지" image="person" catalog="system" id="5m9-DH-Bup"/>
                     <connections>
                         <outlet property="logOutButton" destination="D8h-bY-Ol8" id="pgP-pF-MSd"/>
                         <outlet property="recordTableView" destination="gBm-F9-5OU" id="oF9-7e-2gr"/>
@@ -213,7 +213,7 @@
             </objects>
             <point key="canvasLocation" x="1716.7938931297708" y="1022.5352112676056"/>
         </scene>
-        <!--Item 1-->
+        <!--사용등록-->
         <scene sceneID="9lp-Qt-YC7">
             <objects>
                 <viewController storyboardIdentifier="RegistraionViewController" id="6qs-Vl-0Va" customClass="RegistraionViewController" customModule="kickboard" customModuleProvider="target" sceneMemberID="viewController">
@@ -274,7 +274,7 @@
                         <viewLayoutGuide key="safeArea" id="JaN-zc-i8A"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 1" id="8jr-rG-Z27"/>
+                    <tabBarItem key="tabBarItem" title="사용등록" image="plus.circle" catalog="system" id="8jr-rG-Z27"/>
                     <connections>
                         <outlet property="currentLocationLabel" destination="fci-q3-eUK" id="FaW-hb-SqO"/>
                         <outlet property="kickboardTableView" destination="AEs-4e-WWD" id="gO2-0z-taU"/>
@@ -285,7 +285,7 @@
             </objects>
             <point key="canvasLocation" x="1716.7938931297708" y="-758.45070422535218"/>
         </scene>
-        <!--Item 2-->
+        <!--지도-->
         <scene sceneID="h0k-tn-OAM">
             <objects>
                 <viewController storyboardIdentifier="MapViewController" id="XDx-y0-R8L" customClass="MapViewController" customModule="kickboard" customModuleProvider="target" sceneMemberID="viewController">
@@ -295,7 +295,7 @@
                         <viewLayoutGuide key="safeArea" id="jYX-x9-Llp"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="FCY-S8-9HM"/>
+                    <tabBarItem key="tabBarItem" title="지도" image="map" catalog="system" id="FCY-S8-9HM"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="csK-pO-lRs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -310,6 +310,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" systemColor="labelColor"/>
                     </tabBar>
                     <connections>
                         <segue destination="XDx-y0-R8L" kind="relationship" relationship="viewControllers" id="EVK-G9-HDG"/>
@@ -323,6 +324,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="map" catalog="system" width="128" height="112"/>
+        <image name="person" catalog="system" width="128" height="121"/>
+        <image name="plus.circle" catalog="system" width="128" height="123"/>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

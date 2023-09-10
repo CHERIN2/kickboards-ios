@@ -44,11 +44,16 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
             let kickboardMarker = GMSMarker()
             kickboardMarker.position = CLLocationCoordinate2D(latitude: kickboard.locationY, longitude: kickboard.locationX)
             kickboardMarker.title = "\(kickboard.number)"
-            
             if kickboard.kickboardStatus {
-                kickboardMarker.icon = UIImage(systemName: "circle.fill")
+                if let originalImage = UIImage(named: "redDot"),
+                let resizedImage = originalImage.resize(to: CGSize(width: 20, height: 20)) {
+                 kickboardMarker.icon = resizedImage
+             }
             } else {
-                kickboardMarker.icon = UIImage(systemName: "circle")
+                if let originalImage = UIImage(named: "greenDot"),
+                let resizedImage = originalImage.resize(to: CGSize(width: 20, height: 20)) {
+                 kickboardMarker.icon = resizedImage
+             }
             }
             kickboardMarker.map = mapView
         }
@@ -105,14 +110,15 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
 
     // MARK: - Constraints Setup
     private func setUpConstraints() {
+            
         floatingButton.snp.makeConstraints { make in
             make.width.height.equalTo(50)
             make.bottom.equalTo(view).offset(-100)
             make.trailing.equalTo(view).offset(-20)
             
             searchBar.snp.makeConstraints { make in
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-                make.left.right.equalTo(view)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+                make.left.right.equalTo(view).inset(20)
                 make.height.equalTo(44)
             }
         }
@@ -123,7 +129,15 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         searchBar = UISearchBar()
         searchBar.placeholder = "Search Location"
         searchBar.delegate = self
-        searchBar.isUserInteractionEnabled = true
+        searchBar.searchBarStyle = .minimal
+        searchBar.backgroundImage = UIImage()
+        
+        if let textField = searchBar.value(forKey: "searchField") as? UITextField {
+            textField.backgroundColor = UIColor.clear
+            textField.layer.borderWidth = 1.0
+            textField.layer.borderColor = UIColor.black.cgColor
+            textField.layer.cornerRadius = 8.0
+          }
         view.addSubview(searchBar)
         
         searchBar.searchTextField.addTarget(self, action: #selector(searchBarTapped), for: .touchUpInside)
@@ -137,8 +151,8 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     private func setupFloatingButton() {
         floatingButton = UIButton(type: .custom)
         floatingButton.setImage( UIImage(systemName: "scope"), for: .normal)
+        floatingButton.backgroundColor = .clear
         floatingButton.tintColor = .black
-        floatingButton.backgroundColor = .white
         floatingButton.layer.shadowColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         floatingButton.layer.shadowOpacity = 20
         floatingButton.layer.cornerRadius = 25
@@ -182,7 +196,11 @@ extension MapViewController: CLLocationManagerDelegate {
         let currentMarker = GMSMarker()
         setupCameraPosition(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         currentMarker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        currentMarker.icon = UIImage(systemName: "record.circle")
+        
+        if let originalImage = UIImage(named: "blueDot"),
+        let resizedImage = originalImage.resize(to: CGSize(width: 20, height: 20)) {
+            currentMarker.icon = resizedImage
+     }
         currentMarker.map = mapView
     }
     
