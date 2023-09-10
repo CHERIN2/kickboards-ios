@@ -13,8 +13,8 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     private var currentLocation: CLLocationCoordinate2D?
     private let defaultLatitude: CLLocationDegrees = 37.5759
     private let defaultLongitude: CLLocationDegrees = 126.9768
-
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeMapView()
@@ -33,12 +33,13 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     }
     
     // MARK: - KickBoard Marker
-    private func placeKickboardMarkers() {
+     private func placeKickboardMarkers() {
+        
+        mapView.clear()
         let kickboards = StorageManager.getAllKickboardList()
-
+        
         for kickboard in kickboards {
             let kickboardMarker = GMSMarker()
-            print(kickboard.locationX)
             kickboardMarker.position = CLLocationCoordinate2D(latitude: kickboard.locationY, longitude: kickboard.locationX)
             kickboardMarker.title = "\(kickboard.number)"
             
@@ -52,12 +53,57 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     }
     
     
-    // MARK: - Action Sheet
+    //MARK: - MapView Action Sheet (대여하기)
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-            print("action sheet")
-//        self.showActionSheet(title: "\(marker.title!)번 킥보드 🛴")
+        
+        guard let title = marker.title, let kickboardNumber = Int(title) else { return true }
+        guard let kickboard = StorageManager.getKickboard(byNumber: kickboardNumber) else { return true }
+        guard !kickboard.kickboardStatus else { showAlert(title: "오류!", message: "사용중인 킥보드입니다!"); return true }
+        var rentedKickboard = kickboard
+
+        // 1. 액션시트 띄우기
+        self.showActionSheet(title: "\(kickboard.number)번 킥보드 🛴") { [weak self] completion in
+            if completion {
+                
+                //확인버튼 눌렸을 때 실행하는 클로저
+                print(kickboard.kickboardStatus)
+                
+                // 2. 현재 유저가 킥보드 사용중인지 확인
+                if let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.userKickboardStatus {
+                    self?.showAlert(title: "오류!", message: "이미 다른 킥보드를 사용 중입니다!")
+                    return
+                }
+
+                // 대여하기 공통함수 삽입
+                self?.registerKickboard(&rentedKickboard)
+                print("::::::대여한 킥보드: \(rentedKickboard.number)")
+                print("::::::대여한 킥보드: \(rentedKickboard.kickboardStatus)")
+                self?.placeKickboardMarkers()
+            }
+        }
         return true
     }
+    
+
+    
+    //MARK: - MapView Action Sheet (반납하기)
+    
+    func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
+        
+        //1. 유저 킥보드 대여 상태가 true 인지 확인한다.
+        guard let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.userKickboardStatus else {
+            showAlert(title: "오류!", message: "킥보드 미사용 중입니다!")
+            return
+        }
+        
+        //2. 반납할지 묻는 알람창을 띄운다
+        showActionSheet(title: "반납하기") { [weak self] _ in
+            self?.returnKickboard(for: coordinate)
+            self?.placeKickboardMarkers()
+        }
+    }
+    
+    
 
     
     // MARK: - Constraints Setup
@@ -91,7 +137,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         searchBar.becomeFirstResponder()
     }
     
-
+    
     
     //MARK: - FlotingButton Setup
     private func setupFloatingButton() {
@@ -107,7 +153,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         floatingButton.addTarget(self, action: #selector(floatingButtonTapped), for: .touchUpInside)
         view.addSubview(floatingButton)
     }
-
+    
     
     // MARK: - FloatingButton Action
     @objc private func floatingButtonTapped() {
@@ -126,7 +172,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     }
     
     // MARK: - Camera Position
-
+    
     private func setupCameraPosition(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 15)
         if mapView == nil {
@@ -139,7 +185,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
 
 // MARK: - Find Current Location (CLLocationManagerDelegate)
 extension MapViewController: CLLocationManagerDelegate {
-        
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let currentMarker = GMSMarker()
@@ -169,14 +215,14 @@ extension MapViewController: UISearchBarDelegate {
 //MARK: - GMSAutocompleteViewControllerDelegate
 
 extension MapViewController: GMSAutocompleteViewControllerDelegate {
-
+    
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
         
         setupCameraPosition(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude)
         searchBar.text = place.name
         dismiss(animated: true, completion: nil)
     }
-
+    
     func wasCancelled(_ viewController: GMSAutocompleteViewController) {
         dismiss(animated: true, completion: nil)
     }
