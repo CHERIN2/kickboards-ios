@@ -11,7 +11,6 @@ import GoogleMaps
 extension UIViewController {
     
     //MARK: -  ActionSheet
-    
     func showActionSheet(title: String, completion: @escaping (Bool) -> Void) {
         let cancel = UIAlertAction(title: "취소", style: .destructive)
         let action = UIAlertAction(title: "확인", style: .default) { _ in
@@ -41,9 +40,6 @@ extension UIViewController {
         present(actionSheetController, animated: true)
     }
     
-
-
-
     //MARK: - 대여하기
     //true 반납
     //false 사용 등록
@@ -53,7 +49,7 @@ extension UIViewController {
         //로그인된 유저정보, 픽한 킥보드정보, 사용기록정보 다끌고오기
         var user = StorageManager.fetchUserIsLogined()!
         let newRideRecord = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
-
+        
         var kickBoard = StorageManager.getKickboard(byNumber: newRideRecord.kickboardNumber)
         
         if isReturn {
@@ -64,7 +60,7 @@ extension UIViewController {
             
             user.kickboardStatus = false
             kickboard.kickboardStatus = false
-
+            
         } else {
             
             // 대여하면 해야할일
@@ -77,12 +73,10 @@ extension UIViewController {
             kickboard.userID = user.userID
             
             StorageManager.insertUserRideRecord(newRideRecord)
-
+            
         }
         StorageManager.updateUserKickboardStatus()
         StorageManager.updateKickboard(kickboard)
-
+        
     }
-    
 }
-

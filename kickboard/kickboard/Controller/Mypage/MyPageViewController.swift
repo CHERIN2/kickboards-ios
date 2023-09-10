@@ -15,7 +15,6 @@ class MyPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         guard let userIsLogine = StorageManager.fetchUserIsLogined() else { return }
         id = userIsLogine.userID
         
@@ -37,7 +36,6 @@ class MyPageViewController: UIViewController {
             useingKick.text = "현재 사용중인 킥보드가 없습니다"
         } else {
             useingKick.text = "현재 사용중인 킥보드 :  \(String(usedKick[0].kickboardNumber)) 번"
-            
         }
         
         useingKick.textColor = .darkGray
@@ -71,6 +69,7 @@ extension MyPageViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         "킥보드 사용 이력"
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return usedKick.count
     }
@@ -80,6 +79,4 @@ extension MyPageViewController: UITableViewDataSource, UITableViewDelegate {
         cell.setupCell(number: usedKick[indexPath.row].kickboardNumber)
         return cell
     }
-    
-    
 }

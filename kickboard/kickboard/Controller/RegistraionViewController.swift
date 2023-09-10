@@ -165,7 +165,7 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
             showActionSheet(title: "대여 하시겠습니까?") { [self] completion in
                 if completion {
                     registerKickboard(&self.kickboardsWithinRangeList[indexPath.row], isReturn: true)
-             
+                    
                     findCurrentLocation()
                     
                     DispatchQueue.main.async {

@@ -17,9 +17,12 @@ class SignInViewController: UIViewController {
             showAlert(title: "입력란", message: "모든 입력란을 작성하세요")
         } else {
             var allUsers = StorageManager.fetchAllUser()
+            
             let signtoin = User(userID: signinIDField.text!, password: signInPWField.text ?? "", kickboardStatus: false, isLogined: false)
             allUsers?.append(signtoin)
+            
             guard let allUsers = allUsers else { return }
+            
             StorageManager.saveUser(user: allUsers)
             
             showAlert(title: "", message: "회원가입 축하합니다") { (action) in
@@ -28,8 +31,6 @@ class SignInViewController: UIViewController {
                 }
             }
         }
-        
-
     }
     
     // MARK: - UI SET
