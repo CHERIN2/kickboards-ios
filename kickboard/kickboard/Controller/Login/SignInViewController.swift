@@ -14,7 +14,7 @@ class SignInViewController: UIViewController {
     @IBAction func signInTap(_ sender: Any) {
         if let userID = signinIDField.text, userID.isEmpty,
            let userPW = signInPWField.text, userPW.isEmpty {
-            showAlert1(message: "공란입니다")
+            showAlert(title: "입력란", message: "모든 입력란을 작성하세요")
         } else {
             var allUsers = StorageManager.fetchAllUser()
             let signtoin = User(userID: signinIDField.text!, password: signInPWField.text ?? "", kickboardStatus: false, isLogined: false)
@@ -22,17 +22,14 @@ class SignInViewController: UIViewController {
             guard let allUsers = allUsers else { return }
             StorageManager.saveUser(user: allUsers)
             
-            let vc = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
-            vc.modalPresentationStyle = .fullScreen
-            present(vc, animated: false)
+            showAlert(title: "", message: "회원가입 축하합니다") { (action) in
+                if action {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
         }
-    }
-    
-    func showAlert1(message: String) {
-        let alert = UIAlertController(title: "입력란 확인", message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
-        alert.addAction(okAction)
-        present(alert, animated: true, completion: nil)
+        
+
     }
     
     // MARK: - UI SET

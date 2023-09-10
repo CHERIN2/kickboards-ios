@@ -23,9 +23,11 @@ extension UIViewController {
         present(actionSheetController, animated: true)
     }
 
-    func showAlert(title: String, message: String?) {
+    func showAlert(title: String, message: String?, completion: ((Bool) -> Void)? = nil) {
         let cancel = UIAlertAction(title: "취소", style: .destructive)
-        let action = UIAlertAction(title: "확인", style: .default)
+        let action = UIAlertAction(title: "확인", style: .default) { _ in
+            completion?(true)
+        }
         
         let actionSheetController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
