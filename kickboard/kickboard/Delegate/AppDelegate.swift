@@ -18,15 +18,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         print("Appdelegate")
     
         //MARK: - Add DummyData
-        StorageManager.generateDummyData()
 
-//        let isFirstLaunchKey: String = "isFirstLaunch"
-//        let isFirstLaunch = UserDefaults.standard.bool(forKey: isFirstLaunchKey)
-//        
-//        if !isFirstLaunch {
-//            UserDefaults.standard.set(try? PropertyListEncoder().encode(dummyData), forKey: StorageManager.kickboardKey)
-//            UserDefaults.standard.set(true, forKey: isFirstLaunchKey)
-//        }
+        let isFirstLaunchKey: String = "isFirstLaunch"
+        let isFirstLaunch = UserDefaults.standard.bool(forKey: isFirstLaunchKey)
+        
+        if !isFirstLaunch {
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(dummyData), forKey: StorageManager.kickboardKey)
+            UserDefaults.standard.set(true, forKey: isFirstLaunchKey)
+        }
         
 
         //MARK: - Request User's Location

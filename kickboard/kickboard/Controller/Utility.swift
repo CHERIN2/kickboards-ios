@@ -10,7 +10,7 @@ import GoogleMaps
 
 extension UIViewController {
     
-    //MARK: -  알림창
+    //MARK: -  ActionSheet
     
     func showActionSheet(title: String, completion: @escaping (Bool) -> Void) {
         let cancel = UIAlertAction(title: "취소", style: .destructive)
@@ -25,7 +25,8 @@ extension UIViewController {
         
         present(actionSheetController, animated: true)
     }
-
+    
+    //MARK: - 화면 가운데 팝업 알람창
     func showAlert(title: String, message: String?, completion: ((Bool) -> Void)? = nil) {
         let cancel = UIAlertAction(title: "취소", style: .destructive)
         let action = UIAlertAction(title: "확인", style: .default) { _ in
@@ -40,49 +41,53 @@ extension UIViewController {
         present(actionSheetController, animated: true)
     }
     
-   //MARK: - 화면 가운데 팝업 알람창
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
+
+
 
     //MARK: - 대여하기
     //true 반납
     //false 사용 등록
     //파라미터 및 함수명 변경해야함
-    func  registerKickboard(_ kickboard: inout Kickboard) {
-        guard let user = StorageManager.fetchUserIsLogined() else { return }
+    func  registerKickboard(_ kickboard: inout Kickboard, isReturn: Bool) {
         
-        let record = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
-    
+        //로그인된 유저정보, 픽한 킥보드정보, 사용기록정보 다끌고오기
+        var user = StorageManager.fetchUserIsLogined()!
+        let rideRecord = StorageManager.fetchUserRideRecord(for: user.userID)!
+        var kickBoard = StorageManager.getKickboard(byNumber: rideRecord.kickboardNumber)
+        
+        print(":::::: 로그인한 유저: \(user.userID)")
+        
+        if isReturn {
+            
+            // 반납하면 해야할 일
+            // 1. 유저정보 userKickboardStatus -> false
+            // 2. 킥보드정보 kickboardStatus -> false, 위치값 넣어주기
+            
+            user.kickboardStatus = false
+            kickboard.kickboardStatus = false
+            print(":::::: 반납한 킥보드: \(kickBoard)")
+
+        } else {
+            
+            // 대여하면 해야할일
+            // 1. 유저정보 userKickboardStatus -> true
+            // 2. 킥보드정보 kickboardStatus -> true, UserID -> user
+            // 3. 이용기록 UserID -> user, KickboardNumber -> kickBoard
+            
+            user.kickboardStatus = true
+            kickboard.kickboardStatus = true
+            kickboard.userID = user.userID
+            
+            let newRideRecord = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
+            StorageManager.insertUserRideRecord(newRideRecord)
+
+            print(":::::: 대여한 킥보드: \(kickBoard)")
+
+        }
         StorageManager.updateUserKickboardStatus()
         StorageManager.updateKickboard(kickboard)
-        StorageManager.insertUserRideRecord(record)
-
 
     }
     
-    //MARK: - 반납하기
-    func returnKickboard(for coordinate: CLLocationCoordinate2D) {
-        if let user = StorageManager.fetchUserIsLogined(), let rideRecord = StorageManager.fetchUserRideRecord(for: user.userID) {
-            let currentlyRentedKickboardNumber = rideRecord.kickboardNumber
-            
-            print(":::::: 반납한 유저: \(user.userID)")
-            print(":::::: 반납한 킥보드: \(currentlyRentedKickboardNumber)")
-            
-            if let rentedKickboard = StorageManager.getKickboard(byNumber: currentlyRentedKickboardNumber) {
-                var updatedKickboard = rentedKickboard
-                updatedKickboard.kickboardStatus = false
-                updatedKickboard.locationX = coordinate.longitude
-                updatedKickboard.locationY = coordinate.latitude
-                StorageManager.updateKickboard(updatedKickboard)
-            }
-            
-            var updatedUser = user
-            updatedUser.userKickboardStatus = false
-            StorageManager.updateUserKickboardStatus()
-        }
-    }
 }
 

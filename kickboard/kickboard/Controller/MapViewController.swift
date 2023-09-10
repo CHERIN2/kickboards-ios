@@ -17,6 +17,10 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let userID = StorageManager.fetchUserIsLogined()?.userID
+        print(":::::: 유저 아이디: \(userID)")
+        
         initializeMapView()
         placeKickboardMarkers()
         setupFloatingButton()
@@ -69,13 +73,13 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
                 print(kickboard.kickboardStatus)
                 
                 // 2. 현재 유저가 킥보드 사용중인지 확인
-                if let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.userKickboardStatus {
+                if let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.kickboardStatus {
                     self?.showAlert(title: "오류!", message: "이미 다른 킥보드를 사용 중입니다!")
                     return
                 }
 
                 // 대여하기 공통함수 삽입
-                self?.registerKickboard(&rentedKickboard)
+                self?.registerKickboard(&rentedKickboard, isReturn: false)
                 print("::::::대여한 킥보드: \(rentedKickboard.number)")
                 print("::::::대여한 킥보드: \(rentedKickboard.kickboardStatus)")
                 self?.placeKickboardMarkers()
@@ -89,19 +93,26 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     //MARK: - MapView Action Sheet (반납하기)
     
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
-        
-        //1. 유저 킥보드 대여 상태가 true 인지 확인한다.
-        guard let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.userKickboardStatus else {
+        // 1. Check if the logged user has rented a kickboard
+        guard let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.kickboardStatus else {
             showAlert(title: "오류!", message: "킥보드 미사용 중입니다!")
             return
         }
         
-        //2. 반납할지 묻는 알람창을 띄운다
-        showActionSheet(title: "반납하기") { [weak self] _ in
-            self?.returnKickboard(for: coordinate)
-            self?.placeKickboardMarkers()
+        // 2. Get the kickboard that the user has rented
+        guard let rideRecord = StorageManager.fetchUserRideRecord(for: loggedUser.userID),
+              var rentedKickboard = StorageManager.getKickboard(byNumber: rideRecord.kickboardNumber) else {
+            showAlert(title: "오류!", message: "대여한 킥보드 정보를 찾을 수 없습니다!")
+            return
         }
+        
+        // 3. Call the registerKickboard function to handle the return
+        self.registerKickboard(&rentedKickboard, isReturn: true)
+        rentedKickboard.locationX = coordinate.longitude
+        rentedKickboard.locationY = coordinate.latitude
+        self.placeKickboardMarkers()
     }
+
     
     
 
