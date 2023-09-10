@@ -29,9 +29,7 @@ class KickboardTableViewCell: UITableViewCell {
         
         findAddress(at: location) { (address) in
             if let address = address {
-                DispatchQueue.main.async {
-                    self.addressLabel.text = "\(address)"
-                }
+                self.addressLabel.text = "\(address)"
             }
         }
         
