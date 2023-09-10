@@ -164,8 +164,8 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
         } else {
             showActionSheet(title: "대여 하시겠습니까?") { [self] completion in
                 if completion {
-                    registerKickboard(&self.kickboardsWithinRangeList[indexPath.row], isReturn: true)
-             
+                    switchKickboardStatus(&self.kickboardsWithinRangeList[indexPath.row], to: true)
+                    
                     findCurrentLocation()
                     
                     DispatchQueue.main.async {
@@ -211,7 +211,6 @@ extension RegistraionViewController: CLLocationManagerDelegate {
         findAddress(at: fakeLocation) { (address) in
             if let address = address {
                 DispatchQueue.main.async {
-                    print("현재위치")
                     self.currentLocationLabel.text = "현재 위치: \(address)"
                 }
             }

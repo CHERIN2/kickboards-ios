@@ -8,5 +8,4 @@ class MyPageTableViewCell: UITableViewCell {
     func setupCell(number: Int) {
         usedKick.text = "\(String(number)) 번 킥보드"
     }
-    
 }

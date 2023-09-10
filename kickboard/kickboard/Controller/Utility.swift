@@ -11,7 +11,6 @@ import GoogleMaps
 extension UIViewController {
     
     //MARK: -  ActionSheet
-    
     func showActionSheet(title: String, completion: @escaping (Bool) -> Void) {
         let cancel = UIAlertAction(title: "취소", style: .destructive)
         let action = UIAlertAction(title: "확인", style: .default) { _ in
@@ -41,57 +40,26 @@ extension UIViewController {
         present(actionSheetController, animated: true)
     }
     
-
-
-
-    //MARK: - 대여하기
-    //true 반납
-    //false 사용 등록
-    //파라미터 및 함수명 변경해야함
-    func  registerKickboard(_ kickboard: inout Kickboard, isReturn: Bool) {
+    //MARK: - 킥보드 대여하기, 반납하기 공통 함수
+    //status true = 사용 대여하기,
+    //status false = 미사용 반납하기
+    func switchKickboardStatus(_ kickboard: inout Kickboard, to status: Bool) {
+        guard var user = StorageManager.fetchUserIsLogined() else { return }
+//        var kickBoard = StorageManager.getKickboard(byNumber: newRideRecord.kickboardNumber)
         
+        user.kickboardStatus = status
+        kickboard.kickboardStatus = status
         
-        
-        //로그인된 유저정보, 픽한 킥보드정보, 사용기록정보 다끌고오기
-        var user = StorageManager.fetchUserIsLogined()!
-//        let rideRecord = StorageManager.fetchUserRideRecord(for: user.userID)!
-        let newRideRecord = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
-
-        var kickBoard = StorageManager.getKickboard(byNumber: newRideRecord.kickboardNumber)
-        
-        print(":::::: 로그인한 유저: \(user.userID)")
-        
-        if isReturn {
-            
-            // 반납하면 해야할 일
-            // 1. 유저정보 userKickboardStatus -> false
-            // 2. 킥보드정보 kickboardStatus -> false, 위치값 넣어주기
-            
-            user.kickboardStatus = false
-            kickboard.kickboardStatus = false
-            print(":::::: 반납한 킥보드: \(kickBoard)")
-
-        } else {
-            
-            // 대여하면 해야할일
-            // 1. 유저정보 userKickboardStatus -> true
-            // 2. 킥보드정보 kickboardStatus -> true, UserID -> user
-            // 3. 이용기록 UserID -> user, KickboardNumber -> kickBoard
-            
-            user.kickboardStatus = true
-            kickboard.kickboardStatus = true
-            kickboard.userID = user.userID
-            
-            StorageManager.insertUserRideRecord(newRideRecord)
-
-            print(":::::: 대여한 킥보드: \(kickBoard)")
-
-        }
         StorageManager.updateUserKickboardStatus()
         StorageManager.updateKickboard(kickboard)
-
+        
+        if status {
+            kickboard.userID = user.userID
+            
+            let newRideRecord = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
+            StorageManager.insertUserRideRecord(newRideRecord)
+        }
     }
-    
 }
 
 //MARK: - 이미지 사이즈 조절

@@ -21,6 +21,7 @@ class LoginViewController: UIViewController {
         }
         
         let userInfo = StorageManager.fetchAllUser()
+        
         guard let userInfo = userInfo else {
             return
         }
@@ -33,7 +34,7 @@ class LoginViewController: UIViewController {
                 }
                 
                 StorageManager.updateUserIsLogined(userIDEmpty)
-
+                
             } else {
                 showAlert(title: "확인", message: "ID와 비밀번호가 안 맞습니다")
             }
@@ -49,7 +50,7 @@ class LoginViewController: UIViewController {
         
         loginDesciption.text = "아직 회원이 아니시라면,"
         loginDesciption.textColor = .darkGray
-
+        
         loginToSiginIn.tintColor = .black
         
         loginButton.tintColor = .lightGray
@@ -60,6 +61,5 @@ class LoginViewController: UIViewController {
         typePWField.layer.borderColor = UIColor.black.cgColor
         typePWField.placeholder = "비밀번호를 입력해주세요"
         typePWField.isSecureTextEntry = true
-        
     }
 }
