@@ -93,24 +93,26 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     //MARK: - MapView Action Sheet (반납하기)
     
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
-        // 1. Check if the logged user has rented a kickboard
+
         guard let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.kickboardStatus else {
             showAlert(title: "오류!", message: "킥보드 미사용 중입니다!")
             return
         }
-        
-        // 2. Get the kickboard that the user has rented
+    
         guard let rideRecord = StorageManager.fetchUserRideRecord(for: loggedUser.userID),
               var rentedKickboard = StorageManager.getKickboard(byNumber: rideRecord.kickboardNumber) else {
             showAlert(title: "오류!", message: "대여한 킥보드 정보를 찾을 수 없습니다!")
             return
         }
         
-        // 3. Call the registerKickboard function to handle the return
-        self.registerKickboard(&rentedKickboard, isReturn: true)
-        rentedKickboard.locationX = coordinate.longitude
-        rentedKickboard.locationY = coordinate.latitude
-        self.placeKickboardMarkers()
+        showActionSheet(title: "반납하시겠습니까?") { _ in
+            self.registerKickboard(&rentedKickboard, isReturn: true)
+            rentedKickboard.locationX = coordinate.longitude
+            rentedKickboard.locationY = coordinate.latitude
+            StorageManager.updateKickboard(rentedKickboard)
+            self.placeKickboardMarkers()
+        }
+           
     }
 
     
