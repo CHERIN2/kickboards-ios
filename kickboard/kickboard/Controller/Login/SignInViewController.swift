@@ -1,4 +1,5 @@
 import UIKit
+import SnapKit
 
 class SignInViewController: UIViewController {
     
@@ -11,21 +12,27 @@ class SignInViewController: UIViewController {
     
     // MARK: - userdefault set
     @IBAction func signInTap(_ sender: Any) {
-        let signtoin = User (userID: signinIDField.text!, password: signInPWField.text ?? "", userKickboardStatus: false, isLogined: true)
-//        StorageManager.saveUser(user: signtoin)
-        
-        guard let username = signinIDField.text, !username.isEmpty,
-              let password = signInPWField.text, !password.isEmpty else {
-            showAlert(message: "모든 입력란을 작성하세요")
-            return
+        if let userID = signinIDField.text, userID.isEmpty,
+           let userPW = signInPWField.text, userPW.isEmpty {
+            showAlert1(message: "공란입니다")
+        } else {
+            var allUsers = StorageManager.fetchAllUser()
+            let signtoin = User(userID: signinIDField.text!, password: signInPWField.text ?? "", kickboardStatus: false, isLogined: false)
+            allUsers?.append(signtoin)
+            guard let allUsers = allUsers else { return }
+            StorageManager.saveUser(user: allUsers)
+            
+            let vc = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: false)
         }
-        
-        func showAlert(message: String) {
-            let alert = UIAlertController(title: "경고", message: message, preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
-            alert.addAction(okAction)
-            present(alert, animated: true, completion: nil)
-        }
+    }
+    
+    func showAlert1(message: String) {
+        let alert = UIAlertController(title: "입력란 확인", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: - UI SET

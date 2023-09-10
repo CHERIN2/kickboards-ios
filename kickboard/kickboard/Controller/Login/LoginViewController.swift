@@ -1,4 +1,5 @@
 import UIKit
+import SnapKit
 
 class LoginViewController: UIViewController {
     
@@ -11,7 +12,37 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var typePWField: UITextField!
     
     // MARK: - userdefault set
-    
+    @IBAction func loginTap(_ sender: Any) {
+        
+        guard let userIDEmpty = typeIDField.text, !userIDEmpty.isEmpty,
+              let userPWEmpty = typePWField.text, !userPWEmpty.isEmpty else {
+            showAlert2(message: "모든 입력란을 작성하세요")
+            return
+        }
+        
+        let userInfo = StorageManager.fetchAllUser()
+        guard let userInfo = userInfo else {
+            return
+        }
+        
+        for i in userInfo {
+            if i.userID == userIDEmpty && i.password == userPWEmpty {
+                
+                // isLogined를 true로 바꿔주기
+                // 다음 화면으로 이동
+                let vc = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
+                vc.modalPresentationStyle = .fullScreen
+                present(vc, animated: false)
+            }
+        }
+        
+        func showAlert2(message: String) {
+            let alert = UIAlertController(title: "입력란 확인", message: message, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+            alert.addAction(okAction)
+            present(alert, animated: true, completion: nil)
+        }
+    }
     
     // MARK: - UI SET
     override func viewDidLoad() {
@@ -32,6 +63,7 @@ class LoginViewController: UIViewController {
         
         typePWField.layer.borderColor = UIColor.black.cgColor
         typePWField.placeholder = "비밀번호를 입력해주세요"
+        typePWField.isSecureTextEntry = true
         
     }
 }

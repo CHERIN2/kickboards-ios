@@ -93,6 +93,8 @@ class RegistraionViewController: UIViewController {
     }
     
     func findKickboards(within range: Double, at location: CLLocation) {
+        kickboardsWithinRangeList = []
+        
         let availableKickboardList = StorageManager.getAllKickboardList().filter { $0.kickboardStatus == false }
         
         for kickboard in availableKickboardList {
@@ -162,7 +164,13 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
         } else {
             showActionSheet(title: "대여 하시겠습니까?") { [self] completion in
                 if completion {
-                    registerKickboard(&self.kickboardsWithinRangeList[indexPath.row])
+                    registerKickboard(&self.kickboardsWithinRangeList[indexPath.row], isReturn: false)
+             
+                    findCurrentLocation()
+                    
+                    DispatchQueue.main.async {
+                        self.kickboardTableView.reloadData()
+                    }
                 }
             }
         }
