@@ -73,7 +73,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
                 print(kickboard.kickboardStatus)
                 
                 // 2. 현재 유저가 킥보드 사용중인지 확인
-                if let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.userKickboardStatus {
+                if let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.kickboardStatus {
                     self?.showAlert(title: "오류!", message: "이미 다른 킥보드를 사용 중입니다!")
                     return
                 }
@@ -94,7 +94,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         // 1. Check if the logged user has rented a kickboard
-        guard let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.userKickboardStatus else {
+        guard let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.kickboardStatus else {
             showAlert(title: "오류!", message: "킥보드 미사용 중입니다!")
             return
         }

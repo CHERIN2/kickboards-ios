@@ -103,7 +103,7 @@ class StorageManager {
         
         for (index, i) in allUser.enumerated() {
             if i.userID == userIsLogined.userID {
-                allUser[index].userKickboardStatus.toggle()
+                allUser[index].kickboardStatus.toggle()
             }
         }
         
@@ -144,15 +144,13 @@ class StorageManager {
         let records = getAllUserRideRecord()
         return records.last(where: { $0.userID == userID })
     }
-    
-    
 }
     
  
 struct User: Codable, Equatable {
     let userID: String
     let password: String
-    var userKickboardStatus: Bool
+    var kickboardStatus: Bool
     var isLogined: Bool
 }
 

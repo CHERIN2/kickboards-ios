@@ -63,7 +63,7 @@ extension UIViewController {
             // 1. 유저정보 userKickboardStatus -> false
             // 2. 킥보드정보 kickboardStatus -> false, 위치값 넣어주기
             
-            user.userKickboardStatus = false
+            user.kickboardStatus = false
             kickboard.kickboardStatus = false
             print(":::::: 반납한 킥보드: \(kickBoard)")
 
@@ -74,7 +74,7 @@ extension UIViewController {
             // 2. 킥보드정보 kickboardStatus -> true, UserID -> user
             // 3. 이용기록 UserID -> user, KickboardNumber -> kickBoard
             
-            user.userKickboardStatus = true
+            user.kickboardStatus = true
             kickboard.kickboardStatus = true
             kickboard.userID = user.userID
             
