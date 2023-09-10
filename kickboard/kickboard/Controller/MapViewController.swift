@@ -19,7 +19,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         super.viewDidLoad()
         
         let userID = StorageManager.fetchUserIsLogined()?.userID
-        print(":::::: 유저 아이디: \(userID)")
         
         initializeMapView()
         placeKickboardMarkers()
@@ -68,10 +67,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         // 1. 액션시트 띄우기
         self.showActionSheet(title: "\(kickboard.number)번 킥보드 🛴") { [weak self] completion in
             if completion {
-                
                 //확인버튼 눌렸을 때 실행하는 클로저
-                print(kickboard.kickboardStatus)
-                
                 // 2. 현재 유저가 킥보드 사용중인지 확인
                 if let loggedUser = StorageManager.fetchUserIsLogined(), loggedUser.kickboardStatus {
                     self?.showAlert(title: "오류!", message: "이미 다른 킥보드를 사용 중입니다!")
@@ -80,8 +76,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
 
                 // 대여하기 공통함수 삽입
                 self?.registerKickboard(&rentedKickboard, isReturn: false)
-                print("::::::대여한 킥보드: \(rentedKickboard.number)")
-                print("::::::대여한 킥보드: \(rentedKickboard.kickboardStatus)")
                 self?.placeKickboardMarkers()
             }
         }
@@ -146,7 +140,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     }
     
     @objc func searchBarTapped() {
-        print("Test")
         searchBar.becomeFirstResponder()
     }
     
@@ -170,7 +163,6 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
     
     // MARK: - FloatingButton Action
     @objc private func floatingButtonTapped() {
-        print("floatingButton Tapped")
         func findCurrentLocation() {
             switch locationManager.authorizationStatus {
             case .notDetermined:
