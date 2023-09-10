@@ -109,7 +109,6 @@
                                 <buttonConfiguration key="configuration" style="filled" title="로그인"/>
                                 <connections>
                                     <action selector="loginTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wkN-UB-fdK"/>
-                                    <segue destination="ezt-ZF-rmh" kind="presentation" modalPresentationStyle="fullScreen" id="5Mw-cV-BLp"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rY9-Wb-ldf">
