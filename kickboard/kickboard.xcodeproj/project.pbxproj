@@ -73,6 +73,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A027A752AAE06AD00A0977F /* MapView */ = {
+			isa = PBXGroup;
+			children = (
+				086CCCD62AA6C84100E0EF8B /* MapViewController.swift */,
+			);
+			path = MapView;
+			sourceTree = "<group>";
+		};
+		0A027A762AAE06CE00A0977F /* Registration */ = {
+			isa = PBXGroup;
+			children = (
+				0A01F0AD2AA75AD0009D4241 /* RegistraionViewController.swift */,
+				0A01F0AF2AA75BF6009D4241 /* KickboardTableViewCell.swift */,
+			);
+			path = Registration;
+			sourceTree = "<group>";
+		};
 		0A71688F2AA70A2800646203 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -144,9 +161,8 @@
 			children = (
 				1B5CADB62AAAE1B00023CAD3 /* Mypage */,
 				1B6F85BB2AA5CE9F00E2EEE8 /* Login */,
-				086CCCD62AA6C84100E0EF8B /* MapViewController.swift */,
-				0A01F0AD2AA75AD0009D4241 /* RegistraionViewController.swift */,
-				0A01F0AF2AA75BF6009D4241 /* KickboardTableViewCell.swift */,
+				0A027A752AAE06AD00A0977F /* MapView */,
+				0A027A762AAE06CE00A0977F /* Registration */,
 				0A4CBB3E2AA96B6F008020AF /* Utility.swift */,
 			);
 			path = Controller;

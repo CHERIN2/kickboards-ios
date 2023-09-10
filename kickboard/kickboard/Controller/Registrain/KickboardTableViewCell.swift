@@ -34,7 +34,7 @@ class KickboardTableViewCell: UITableViewCell {
                 }
             }
         }
-        
+
         addressLabel.numberOfLines = 0
         addressLabel.lineBreakStrategy = .hangulWordPriority
         
