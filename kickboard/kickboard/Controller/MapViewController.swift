@@ -73,7 +73,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
                 }
                 
                 // 대여하기 공통함수 삽입
-                self?.registerKickboard(&rentedKickboard, isReturn: false)
+                self?.switchKickboardStatus(&rentedKickboard, to: true)
                 self?.placeKickboardMarkers()
             }
         }
@@ -95,7 +95,7 @@ class MapViewController: UIViewController, GMSMapViewDelegate {
         }
         
         showActionSheet(title: "반납하시겠습니까?") { _ in
-            self.registerKickboard(&rentedKickboard, isReturn: true)
+            self.switchKickboardStatus(&rentedKickboard, to: false)
             rentedKickboard.locationX = coordinate.longitude
             rentedKickboard.locationY = coordinate.latitude
             StorageManager.updateKickboard(rentedKickboard)
