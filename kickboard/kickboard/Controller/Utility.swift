@@ -44,7 +44,7 @@ extension UIViewController {
     //status true = 사용 대여하기,
     //status false = 미사용 반납하기
     func switchKickboardStatus(_ kickboard: inout Kickboard, to status: Bool) {
-        guard var user = StorageManager.fetchUserIsLogined() else { return }
+        guard let user = StorageManager.fetchUserIsLogined() else { return }
         
         kickboard.kickboardStatus = status
         

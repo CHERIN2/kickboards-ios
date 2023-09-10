@@ -171,6 +171,8 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
                     DispatchQueue.main.async {
                         self.kickboardTableView.reloadData()
                     }
+                
+                    hoursTextField.text = nil
                 }
             }
         }
