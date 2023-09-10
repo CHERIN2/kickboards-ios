@@ -27,6 +27,10 @@ class RegistraionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         kickboardTableView.dataSource = self
         kickboardTableView.delegate = self
@@ -159,21 +163,30 @@ extension RegistraionViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         if hoursTextField.text == "" {
             showAlert(title: "필수항목", message: "시간을 입력해 주세요")
-        } else {
-            showActionSheet(title: "대여 하시겠습니까?") { [self] completion in
-                if completion {
-                    switchKickboardStatus(&self.kickboardsWithinRangeList[indexPath.row], to: true)
-                    
-                    findCurrentLocation()
-                    
-                    DispatchQueue.main.async {
-                        self.kickboardTableView.reloadData()
-                    }
+        }
+        
+        guard let userIsLogine = StorageManager.fetchUserIsLogined() else { return }
+        var kickboardList: [Kickboard] = []
+        kickboardList = StorageManager.getAllKickboardList().filter { $0.userID == userIsLogine.userID }
+        
+        if !kickboardList.isEmpty {
+            showAlert(title: "확인해 주세요", message: "아직 사용중인 킥보드가 있습니다")
+        }
+
+        showActionSheet(title: "대여 하시겠습니까?") { [self] completion in
+            if completion {
+                switchKickboardStatus(&self.kickboardsWithinRangeList[indexPath.row], to: true)
                 
-                    hoursTextField.text = nil
+                findCurrentLocation()
+                
+                DispatchQueue.main.async {
+                    self.kickboardTableView.reloadData()
                 }
+                
+                hoursTextField.text = nil
             }
         }
     }
