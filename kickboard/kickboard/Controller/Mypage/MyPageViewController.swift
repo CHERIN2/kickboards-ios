@@ -8,42 +8,49 @@ class MyPageViewController: UIViewController {
     @IBOutlet weak var logOutButton: UIButton!
     @IBOutlet weak var recordTableView: UITableView!
     
-    var id: String = ""
-    var usedKick: [UserRideRecord] = []
+    var loginedID: String = ""
+    var usedKick: [Kickboard] = []
+    var record: [UserRideRecord] = []
     
     //MARK: - UI set
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        recordTableView.delegate = self
+        recordTableView.dataSource = self
         
         guard let userIsLogine = StorageManager.fetchUserIsLogined() else { return }
-        id = userIsLogine.userID
+        loginedID = userIsLogine.userID
         
-        usedKick = StorageManager.getAllUserRideRecord().filter { $0.userID == id }
+        usedKick = StorageManager.getAllKickboardList().filter { $0.userID == loginedID }
+        
+        record = StorageManager.getAllUserRideRecord().filter { $0.userID == loginedID }
+        recordTableView.reloadData()
         
         setupUserID()
         setupUseingKick()
-        setupTable()
         setupLogoutButton()
     }
     
     func setupUserID() {
-        userID.text = "사용자 ID : \(id)"
+        userID.text = "사용자 ID : \(loginedID)"
         userID.textColor = .black
     }
     
     func setupUseingKick() {
-        if usedKick.isEmpty {
+        
+        guard let number = usedKick.last?.number else {
             useingKick.text = "현재 사용중인 킥보드가 없습니다"
-        } else {
-            useingKick.text = "현재 사용중인 킥보드 :  \(String(usedKick[0].kickboardNumber)) 번"
+            return
         }
         
+        useingKick.text = "현재 사용중인 킥보드 :  \(number) 번"
+
         useingKick.textColor = .darkGray
-    }
-    
-    func setupTable() {
-        recordTableView.delegate = self
-        recordTableView.dataSource = self
     }
     
     func setupLogoutButton() {
@@ -71,12 +78,12 @@ extension MyPageViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return usedKick.count
+        return record.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = recordTableView.dequeueReusableCell(withIdentifier: "usedKickCell", for: indexPath) as! MyPageTableViewCell
-        cell.setupCell(number: usedKick[indexPath.row].kickboardNumber)
+        cell.setupCell(number: record[indexPath.row].kickboardNumber)
         return cell
     }
 }

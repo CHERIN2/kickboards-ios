@@ -45,20 +45,20 @@ extension UIViewController {
     //status false = 미사용 반납하기
     func switchKickboardStatus(_ kickboard: inout Kickboard, to status: Bool) {
         guard var user = StorageManager.fetchUserIsLogined() else { return }
-//        var kickBoard = StorageManager.getKickboard(byNumber: newRideRecord.kickboardNumber)
         
-        user.kickboardStatus = status
         kickboard.kickboardStatus = status
-        
-        StorageManager.updateUserKickboardStatus()
-        StorageManager.updateKickboard(kickboard)
         
         if status {
             kickboard.userID = user.userID
             
             let newRideRecord = UserRideRecord(userID: user.userID, kickboardNumber: kickboard.number)
             StorageManager.insertUserRideRecord(newRideRecord)
+        } else {
+            kickboard.userID = nil
         }
+        
+        StorageManager.updateUserKickboardStatus()
+        StorageManager.updateKickboard(kickboard)
     }
 }
 
