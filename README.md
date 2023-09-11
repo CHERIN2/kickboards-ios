@@ -6,8 +6,7 @@
 
 
 Youtube Link:
-https://youtu.be/xji9AN2iwJ0
-
+https://youtu.be/xji9AN2iwJ0 <br/>
 Notion Link: 
 https://www.notion.so/iOS-12-ff58e0f9416940e69f0980f6a4f2d85c
 
