@@ -3,7 +3,7 @@
 
 ### What kind of app is it?
 
-&nbsp;&nbsp;&nbsp;&nbsp;<img src="Test.gif"><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="test.gif"><br/>
 
 
 #
