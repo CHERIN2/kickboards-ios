@@ -20,12 +20,12 @@ kickboards-ios/
 │
 ├── Views/
 │   ├── MyPageTableViewCell.swift
-│   ├── KickboardTableViewCell.swift
+│   └── KickboardTableViewCell.swift
 │
 └── Utilities/
-    ├── Utility.swift
+│    └── Utility.swift
 │
 └── Models/
-    ├── Model.swift
+    └── Model.swift
     
 </pre>
