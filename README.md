@@ -15,9 +15,7 @@ https://www.notion.so/iOS-12-ff58e0f9416940e69f0980f6a4f2d85c
 ### Figma Screenshot
 
 &nbsp;&nbsp;&nbsp;&nbsp;<img src="FigmaScreenshot.png"><br/><br/>
-
 #
-
 ### Structure
 
 <pre>  
